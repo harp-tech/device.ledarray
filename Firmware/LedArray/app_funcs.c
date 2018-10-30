@@ -1046,8 +1046,7 @@ bool app_write_REG_AUX_SUPPLY_PWR_CONF(void *a)
    if (reg < 1 || reg > 120)
 		return false;	
 
-	if (!write_SMBus_word(25, 0x22, ((int16_t) reg) * 5 -300))
-		core_func_catastrophic_error_detected();
+	write_SMBus_word(25, 0x22, ((int16_t) reg) * 5 -300);
 
 	app_regs.REG_AUX_SUPPLY_PWR_CONF = reg;
 	return true;
