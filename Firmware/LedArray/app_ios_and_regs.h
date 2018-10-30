@@ -27,8 +27,8 @@ void init_ios(void);
 // AUX1                   Description: Dummy digital output
 // AUX0                   Description: Dummy digital output
 // BOARD_LED0             Description: Board's LED0
-// OUT0                   Description: Board's output OUT0
-// OUT1                   Description: Board's output OUT1
+// OUT0                   Description: Board's output OUT1
+// OUT1                   Description: Board's output OUT0
 
 /* LED0_TRANSISTOR */
 #define set_LED0_TRANSISTOR set_io(PORTC, 0)
@@ -79,16 +79,16 @@ void init_ios(void);
 #define read_BOARD_LED0 read_io(PORTC, 4)
 
 /* OUT0 */
-#define set_OUT0 set_io(PORTA, 2)
-#define clr_OUT0 clear_io(PORTA, 2)
-#define tgl_OUT0 toggle_io(PORTA, 2)
-#define read_OUT0 read_io(PORTA, 2)
+#define set_OUT0 set_io(PORTD, 7)
+#define clr_OUT0 clear_io(PORTD, 7)
+#define tgl_OUT0 toggle_io(PORTD, 7)
+#define read_OUT0 read_io(PORTD, 7)
 
 /* OUT1 */
-#define set_OUT1 set_io(PORTD, 7)
-#define clr_OUT1 clear_io(PORTD, 7)
-#define tgl_OUT1 toggle_io(PORTD, 7)
-#define read_OUT1 read_io(PORTD, 7)
+#define set_OUT1 set_io(PORTA, 2)
+#define clr_OUT1 clear_io(PORTA, 2)
+#define tgl_OUT1 toggle_io(PORTA, 2)
+#define read_OUT1 read_io(PORTA, 2)
 
 
 /************************************************************************/
@@ -127,8 +127,8 @@ typedef struct
 	float REG_LED1_PWM_DCYCLE_REAL;
 	uint8_t REG_AUX_DIG_OUT;
 	uint8_t REG_AUX_SUPPLY_PWR_CONF;
+	uint8_t REG_OUT_STATE;
 	uint8_t REG_DUMMY0;
-	uint8_t REG_DUMMY1;
 	uint8_t REG_EVNT_ENABLE;
 } AppRegs;
 
@@ -167,8 +167,8 @@ typedef struct
 #define ADD_REG_LED1_PWM_DCYCLE_REAL        60 // FLOAT  Real PWM duty cycle of LED1's power transistor
 #define ADD_REG_AUX_DIG_OUT                 61 // U8     Controls the auxiliar digital output
 #define ADD_REG_AUX_SUPPLY_PWR_CONF         62 // U8     Configuration of power to be aplied to auxiliar LED [1;120]
-#define ADD_REG_DUMMY0                      63 // U8     Not used
-#define ADD_REG_DUMMY1                      64 // U8     Not used
+#define ADD_REG_OUT_STATE                   63 // U8     Digital output control
+#define ADD_REG_DUMMY0                      64 // U8     Not used
 #define ADD_REG_EVNT_ENABLE                 65 // U8     Enable the Events
 
 /************************************************************************/
@@ -200,23 +200,21 @@ typedef struct
 #define B_IN0                              (1<<0)       // State of input IN0
 #define B_IN1                              (1<<1)       // State of input IN1
 #define MSK_OUT0_CONF                      (7<<0)       // Select OUT0 function
-#define GM_OUT0_LED0_PWR_EN                (0<<0)       // Equal to bit LED0_PWR_EN
-#define GM_OUT0_LED1_PWR_EN                (1<<0)       // Equal to bit LED1_PWR_EN
-#define GM_OUT0_LED0_START                 (2<<0)       // Equal to bit LED0_START
-#define GM_OUT0_LED1_START                 (3<<0)       // Equal to bit LED1_START
-#define GM_OUT0_LED0_ON                    (4<<0)       // Equal to bit LED0_ON
-#define GM_OUT0_LED1_ON                    (5<<0)       // Equal to bit LED1_ON
-#define GM_OUT0_IN0                        (6<<0)       // Equal to bit IN0
-#define GM_OUT0_IN1                        (7<<0)       // Equal to bit IN1
+#define GM_OUT0_SOFTWARE                   (0<<0)       // Pure digital output
+#define GM_OUT0_LED0_PWR_EN                (1<<0)       // Equal to bit LED0_PWR_EN
+#define GM_OUT0_LED1_PWR_EN                (2<<0)       // Equal to bit LED1_PWR_EN
+#define GM_OUT0_LED0_START                 (3<<0)       // Equal to bit LED0_START
+#define GM_OUT0_LED1_START                 (4<<0)       // Equal to bit LED1_START
+#define GM_OUT0_LED0_ON                    (5<<0)       // Equal to bit LED0_ON
+#define GM_OUT0_LED1_ON                    (6<<0)       // Equal to bit LED1_ON
 #define MSK_OUT1_CONF                      (7<<4)       // Select OUT1 function
-#define GM_OUT1_LED0_PWR_EN                (0<<0)       // Equal to bit LED0_PWR_EN
-#define GM_OUT1_LED1_PWR_EN                (1<<0)       // Equal to bit LED1_PWR_EN
-#define GM_OUT1_LED0_START                 (2<<0)       // Equal to bit LED0_START
-#define GM_OUT1_LED1_START                 (3<<0)       // Equal to bit LED1_START
-#define GM_OUT1_LED0_ON                    (4<<0)       // Equal to bit LED0_ON
-#define GM_OUT1_LED1_ON                    (5<<0)       // Equal to bit LED1_ON
-#define GM_OUT1_IN0                        (6<<0)       // Equal to bit IN0
-#define GM_OUT1_IN1                        (7<<0)       // Equal to bit IN1
+#define GM_OUT1_SOFTWARE                   (0<<4)       // Pure digital output
+#define GM_OUT1_LED0_PWR_EN                (1<<4)       // Equal to bit LED0_PWR_EN
+#define GM_OUT1_LED1_PWR_EN                (2<<4)       // Equal to bit LED1_PWR_EN
+#define GM_OUT1_LED0_START                 (3<<4)       // Equal to bit LED0_START
+#define GM_OUT1_LED1_START                 (4<<4)       // Equal to bit LED1_START
+#define GM_OUT1_LED0_ON                    (5<<4)       // Equal to bit LED0_ON
+#define GM_OUT1_LED1_ON                    (6<<4)       // Equal to bit LED1_ON
 #define MSK_IN0_CONF                       (7<<0)       // Configure IN0
 #define MSK_IN1_CONF                       (7<<4)       // Configure IN1
 #define GM_IN0_CONF_LED0_PWR_EN            (0<<0)       // IN0 controls bit LED0_PWR_EN
@@ -243,6 +241,10 @@ typedef struct
 #define B_AUX1_TO_HIGH                     (1<<1)       // Turn AUX1 to high level if equal to 1
 #define B_AUX0_TO_LOW                      (1<<2)       // Turn AUX0 to low level if equal to 1
 #define B_AUX1_TO_LOW                      (1<<3)       // Turn AUX1 to low level if equal to 1
+#define B_OUT0_TO_HIGH                     (1<<0)       // Turn OUT0 to high level if equal to 1
+#define B_OUT1_TO_HIGH                     (1<<1)       // Turn OUT1 to high level if equal to 1
+#define B_OUT0_TO_LOW                      (1<<2)       // Turn OUT0 to low level if equal to 1
+#define B_OUT1_TO_LOW                      (1<<3)       // Turn OUT1 to low level if equal to 1
 #define B_EVT_LED_ON                       (1<<0)       // Event of register LED_ON
 #define B_EVT_IN_STATE                     (1<<1)       // Event of register IN_STATE
 

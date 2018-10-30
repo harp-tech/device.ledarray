@@ -25,8 +25,8 @@ void init_ios(void)
 	io_pin2out(&PORTD, 1, OUT_IO_DIGITAL, IN_EN_IO_EN);                  // AUX1
 	io_pin2out(&PORTD, 2, OUT_IO_DIGITAL, IN_EN_IO_EN);                  // AUX0
 	io_pin2out(&PORTC, 4, OUT_IO_DIGITAL, IN_EN_IO_DIS);                 // BOARD_LED0
-	io_pin2out(&PORTA, 2, OUT_IO_DIGITAL, IN_EN_IO_EN);                  // OUT0
-	io_pin2out(&PORTD, 7, OUT_IO_DIGITAL, IN_EN_IO_EN);                  // OUT1
+	io_pin2out(&PORTD, 7, OUT_IO_DIGITAL, IN_EN_IO_EN);                  // OUT0
+	io_pin2out(&PORTA, 2, OUT_IO_DIGITAL, IN_EN_IO_EN);                  // OUT1
 
 	/* Initialize output pins */
 	clr_LED0_TRANSISTOR;
@@ -152,7 +152,7 @@ uint8_t *app_regs_pointer[] = {
 	(uint8_t*)(&app_regs.REG_LED1_PWM_DCYCLE_REAL),
 	(uint8_t*)(&app_regs.REG_AUX_DIG_OUT),
 	(uint8_t*)(&app_regs.REG_AUX_SUPPLY_PWR_CONF),
+	(uint8_t*)(&app_regs.REG_OUT_STATE),
 	(uint8_t*)(&app_regs.REG_DUMMY0),
-	(uint8_t*)(&app_regs.REG_DUMMY1),
 	(uint8_t*)(&app_regs.REG_EVNT_ENABLE)
 };

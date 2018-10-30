@@ -51,8 +51,8 @@ void app_read_REG_LED1_PWM_FREQ_REAL(void);
 void app_read_REG_LED1_PWM_DCYCLE_REAL(void);
 void app_read_REG_AUX_DIG_OUT(void);
 void app_read_REG_AUX_SUPPLY_PWR_CONF(void);
+void app_read_REG_OUT_STATE(void);
 void app_read_REG_DUMMY0(void);
-void app_read_REG_DUMMY1(void);
 void app_read_REG_EVNT_ENABLE(void);
 
 bool app_write_REG_POWER_EN(void *a);
@@ -86,8 +86,8 @@ bool app_write_REG_LED1_PWM_FREQ_REAL(void *a);
 bool app_write_REG_LED1_PWM_DCYCLE_REAL(void *a);
 bool app_write_REG_AUX_DIG_OUT(void *a);
 bool app_write_REG_AUX_SUPPLY_PWR_CONF(void *a);
+bool app_write_REG_OUT_STATE(void *a);
 bool app_write_REG_DUMMY0(void *a);
-bool app_write_REG_DUMMY1(void *a);
 bool app_write_REG_EVNT_ENABLE(void *a);
 
 

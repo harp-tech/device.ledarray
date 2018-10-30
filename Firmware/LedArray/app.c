@@ -211,7 +211,7 @@ void core_callback_reset_registers(void)
 	app_regs.REG_LED_BEHAVING = 0;
 	app_regs.REG_LED_ON = 0;
    
-	app_regs.REG_OUT_CONFIGURATION = GM_OUT0_LED0_ON | GM_OUT0_LED0_ON;
+	app_regs.REG_OUT_CONFIGURATION = GM_OUT0_SOFTWARE | GM_OUT1_SOFTWARE;
 	app_regs.REG_IN_CONFIGURATION = GM_IN0_CONF_LED0_ON | GM_IN1_CONF_LED1_ON;
 	app_regs.REG_LED_CONFIGURATION = GM_LED0_PWM | GM_LED1_PWM;
 	
@@ -246,8 +246,9 @@ void core_callback_reset_registers(void)
    
 	app_regs.REG_AUX_SUPPLY_PWR_CONF = 60;
    
+	app_regs.REG_OUT_STATE = 0;
+   
 	app_regs.REG_DUMMY0 = 0;
-	app_regs.REG_DUMMY1 = 0;
 
 	app_regs.REG_EVNT_ENABLE = B_EVT_IN_STATE | B_EVT_LED_ON;
 }
@@ -325,6 +326,14 @@ void core_callback_registers_were_reinitialized(void)
    if (read_LED1_PWR_ON && read_LED1_TRANSISTOR)
       if (core_bool_is_visual_enabled())
          set_BOARD_LED1;
+         
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_SOFTWARE)
+      if (app_regs.REG_OUT_STATE & B_OUT0_TO_HIGH)
+         set_OUT0;
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_SOFTWARE)
+      if (app_regs.REG_OUT_STATE & B_OUT1_TO_HIGH)
+         set_OUT1;
+         
 
    update_reals(&app_regs.REG_LED0_PWM_FREQ_REAL, &app_regs.REG_LED0_PWM_DCYCLE_REAL, app_regs.REG_LED0_PWM_FREQ, app_regs.REG_LED0_PWM_DCYCLE);
    update_reals(&app_regs.REG_LED1_PWM_FREQ_REAL, &app_regs.REG_LED1_PWM_DCYCLE_REAL, app_regs.REG_LED1_PWM_FREQ, app_regs.REG_LED1_PWM_DCYCLE);

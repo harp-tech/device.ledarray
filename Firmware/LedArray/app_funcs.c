@@ -40,8 +40,8 @@ void (*app_func_rd_pointer[])(void) = {
 	&app_read_REG_LED1_PWM_DCYCLE_REAL,
 	&app_read_REG_AUX_DIG_OUT,
 	&app_read_REG_AUX_SUPPLY_PWR_CONF,
+	&app_read_REG_OUT_STATE,
 	&app_read_REG_DUMMY0,
-	&app_read_REG_DUMMY1,
 	&app_read_REG_EVNT_ENABLE
 };
 
@@ -77,8 +77,8 @@ bool (*app_func_wr_pointer[])(void*) = {
 	&app_write_REG_LED1_PWM_DCYCLE_REAL,
 	&app_write_REG_AUX_DIG_OUT,
 	&app_write_REG_AUX_SUPPLY_PWR_CONF,
+	&app_write_REG_OUT_STATE,
 	&app_write_REG_DUMMY0,
-	&app_write_REG_DUMMY1,
 	&app_write_REG_EVNT_ENABLE
 };
 
@@ -403,6 +403,9 @@ bool app_write_REG_POWER_EN(void *a)
 
    if (reg & B_LED1_PWR_DIS)
       clr_LED1_PWR_ON;
+      
+   UPDATE_BOARD_LED0;
+   UPDATE_BOARD_LED1;
 
    return true;
 }
@@ -557,6 +560,8 @@ bool app_write_REG_LED_CONFIGURATION(void *a)
 /************************************************************************/
 /* REG_LED0_SUPPLY_PWR_CONF                                             */
 /************************************************************************/
+bool write_SMBus_word(uint8_t add, uint8_t reg, int16_t word);
+
 void app_read_REG_LED0_SUPPLY_PWR_CONF(void) {}
 bool app_write_REG_LED0_SUPPLY_PWR_CONF(void *a)
 {
@@ -595,6 +600,8 @@ bool app_write_REG_LED1_SUPPLY_PWR_CONF(void *a)
 /************************************************************************/
 /* REG_LED0_PWM_FREQ                                                    */
 /************************************************************************/
+bool update_reals(float * real_freq, float * real_dcycle, float freq, float dcycle);
+
 void app_read_REG_LED0_PWM_FREQ(void) {}
 bool app_write_REG_LED0_PWM_FREQ(void *a)
 {
@@ -1012,16 +1019,16 @@ bool app_write_REG_AUX_DIG_OUT(void *a)
 {
 	uint8_t reg = *((uint8_t*)a);
    
-   if (reg & B_LED0_TO_ON)
+   if (reg & B_AUX0_TO_HIGH)
       set_AUX0;
    
-   if (reg & B_LED0_TO_OFF)
+   if (reg & B_AUX0_TO_LOW)
       clr_AUX0;
    
-   if (reg & B_LED1_TO_ON)
+   if (reg & B_AUX1_TO_HIGH)
       set_AUX1;
    
-   if (reg & B_LED1_TO_OFF)
+   if (reg & B_AUX1_TO_LOW)
       clr_AUX1;
       
 	return true;
@@ -1050,12 +1057,33 @@ bool app_write_REG_AUX_SUPPLY_PWR_CONF(void *a)
 /************************************************************************/
 /* REG_DUMMY0                                                           */
 /************************************************************************/
-void app_read_REG_DUMMY0(void) {}
-bool app_write_REG_DUMMY0(void *a)
+void app_read_REG_OUT_STATE(void)
+{
+   app_regs.REG_AUX_DIG_OUT  = (read_OUT0) ? B_OUT0_TO_HIGH : 0;
+   app_regs.REG_AUX_DIG_OUT |= (read_OUT1) ? B_OUT1_TO_HIGH : 0;
+}
+bool app_write_REG_OUT_STATE(void *a)
 {
 	uint8_t reg = *((uint8_t*)a);
-
-	app_regs.REG_DUMMY0 = reg;
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_SOFTWARE)
+   {
+      if (reg & B_OUT0_TO_HIGH)
+         set_OUT0;
+      
+      if (reg & B_OUT0_TO_LOW)
+         clr_OUT0;
+   }
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_SOFTWARE)
+   {
+      if (reg & B_OUT1_TO_HIGH)
+         set_OUT1;
+      
+      if (reg & B_OUT1_TO_LOW)
+         clr_OUT1;
+   }
+   
 	return true;
 }
 
@@ -1063,12 +1091,12 @@ bool app_write_REG_DUMMY0(void *a)
 /************************************************************************/
 /* REG_DUMMY1                                                           */
 /************************************************************************/
-void app_read_REG_DUMMY1(void) {}
-bool app_write_REG_DUMMY1(void *a)
+void app_read_REG_DUMMY0(void) {}
+bool app_write_REG_DUMMY0(void *a)
 {
 	uint8_t reg = *((uint8_t*)a);
 
-	app_regs.REG_DUMMY1 = reg;
+	app_regs.REG_DUMMY0 = reg;
 	return true;
 }
 
