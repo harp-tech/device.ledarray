@@ -329,12 +329,36 @@ void core_callback_registers_were_reinitialized(void)
          
    if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_SOFTWARE)
       if (app_regs.REG_OUT_STATE & B_OUT0_TO_HIGH)
-         set_OUT0;
+         set_OUT0; else clr_OUT0;
+   
    if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_SOFTWARE)
       if (app_regs.REG_OUT_STATE & B_OUT1_TO_HIGH)
-         set_OUT1;
-         
-
+         set_OUT1; else clr_OUT1;
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_PWR_EN)
+      if (read_LED0_PWR_ON)
+         set_OUT0; else clr_OUT0;
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_PWR_EN)
+      if (read_LED1_PWR_ON)
+         set_OUT1; else clr_OUT1;
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_START)
+      if (app_regs.REG_LED_BEHAVING & B_LED0_START)
+         set_OUT0; else clr_OUT0;
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_START)
+      if (app_regs.REG_LED_BEHAVING & B_LED1_START)
+         set_OUT1; else clr_OUT1;
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+      if (read_LED0_TRANSISTOR)
+         set_OUT0; else clr_OUT0;
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+      if (read_LED1_TRANSISTOR)
+         set_OUT1; else clr_OUT1;
+   
    update_reals(&app_regs.REG_LED0_PWM_FREQ_REAL, &app_regs.REG_LED0_PWM_DCYCLE_REAL, app_regs.REG_LED0_PWM_FREQ, app_regs.REG_LED0_PWM_DCYCLE);
    update_reals(&app_regs.REG_LED1_PWM_FREQ_REAL, &app_regs.REG_LED1_PWM_DCYCLE_REAL, app_regs.REG_LED1_PWM_FREQ, app_regs.REG_LED1_PWM_DCYCLE);
 }

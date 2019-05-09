@@ -199,22 +199,16 @@ typedef struct
 #define B_LED1_TO_OFF                      (1<<3)       // Turn LED1 off if equal to 1
 #define B_IN0                              (1<<0)       // State of input IN0
 #define B_IN1                              (1<<1)       // State of input IN1
-#define MSK_OUT0_CONF                      (7<<0)       // Select OUT0 function
+#define MSK_OUT0_CONF                      (3<<0)       // Select OUT0 function
 #define GM_OUT0_SOFTWARE                   (0<<0)       // Pure digital output
 #define GM_OUT0_LED0_PWR_EN                (1<<0)       // Equal to bit LED0_PWR_EN
-#define GM_OUT0_LED1_PWR_EN                (2<<0)       // Equal to bit LED1_PWR_EN
-#define GM_OUT0_LED0_START                 (3<<0)       // Equal to bit LED0_START
-#define GM_OUT0_LED1_START                 (4<<0)       // Equal to bit LED1_START
-#define GM_OUT0_LED0_ON                    (5<<0)       // Equal to bit LED0_ON
-#define GM_OUT0_LED1_ON                    (6<<0)       // Equal to bit LED1_ON
-#define MSK_OUT1_CONF                      (7<<4)       // Select OUT1 function
+#define GM_OUT0_LED0_START                 (2<<0)       // Equal to bit LED0_START
+#define GM_OUT0_LED0_ON                    (3<<0)       // Equal to bit LED0_ON
+#define MSK_OUT1_CONF                      (3<<4)       // Select OUT1 function
 #define GM_OUT1_SOFTWARE                   (0<<4)       // Pure digital output
-#define GM_OUT1_LED0_PWR_EN                (1<<4)       // Equal to bit LED0_PWR_EN
-#define GM_OUT1_LED1_PWR_EN                (2<<4)       // Equal to bit LED1_PWR_EN
-#define GM_OUT1_LED0_START                 (3<<4)       // Equal to bit LED0_START
-#define GM_OUT1_LED1_START                 (4<<4)       // Equal to bit LED1_START
-#define GM_OUT1_LED0_ON                    (5<<4)       // Equal to bit LED0_ON
-#define GM_OUT1_LED1_ON                    (6<<4)       // Equal to bit LED1_ON
+#define GM_OUT1_LED1_PWR_EN                (1<<4)       // Equal to bit LED1_PWR_EN
+#define GM_OUT1_LED1_START                 (2<<4)       // Equal to bit LED1_START
+#define GM_OUT1_LED1_ON                    (3<<4)       // Equal to bit LED1_ON
 #define MSK_IN0_CONF                       (7<<0)       // Configure IN0
 #define MSK_IN1_CONF                       (7<<4)       // Configure IN1
 #define GM_IN0_CONF_LED0_PWR_EN            (0<<0)       // IN0 controls bit LED0_PWR_EN

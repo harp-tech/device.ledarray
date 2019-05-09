@@ -127,8 +127,14 @@ void start_led0_pwm(void)
    {
       clr_LED0_TRANSISTOR;
       
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+         clr_OUT0;
+      
       duty_cycle = app_regs.REG_LED0_PWM_DCYCLE/100.0 * target_count + 0.5;
       timer_type0_pwm(&TCC0, prescaler, target_count, duty_cycle, INT_LEVEL_LOW, INT_LEVEL_LOW);
+      
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_START)
+         set_OUT0;
 
       app_regs.REG_LED_BEHAVING = (app_regs.REG_LED_BEHAVING & B_LED1_START) | B_LED0_START;
       app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED1_TO_ON) | B_LED0_TO_ON;
@@ -147,10 +153,16 @@ void start_led1_pwm(void)
    
    if (calculate_timer_16bits(32000000, app_regs.REG_LED1_PWM_FREQ, &prescaler, &target_count))
    {
-      clr_LED0_TRANSISTOR;
+      clr_LED1_TRANSISTOR;
+      
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+         clr_OUT1;
       
       duty_cycle = app_regs.REG_LED1_PWM_DCYCLE/100.0 * target_count + 0.5;
       timer_type0_pwm(&TCD0, prescaler, target_count, duty_cycle, INT_LEVEL_LOW, INT_LEVEL_LOW);
+      
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_START)
+         set_OUT1;
       
       app_regs.REG_LED_BEHAVING = (app_regs.REG_LED_BEHAVING & B_LED0_START) | B_LED1_START;
       app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED0_TO_ON) | B_LED1_TO_ON;
@@ -175,6 +187,12 @@ void start_led0_interval(void)
    
    set_LED0_TRANSISTOR;
    
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+      set_OUT0;
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_START)
+      set_OUT0;
+   
    app_regs.REG_LED_BEHAVING = (app_regs.REG_LED_BEHAVING & B_LED1_START) | B_LED0_START;
    app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED1_TO_ON) | B_LED0_TO_ON;
 
@@ -194,6 +212,12 @@ void start_led1_interval(void)
    
    set_LED1_TRANSISTOR;
    
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+      set_OUT1;
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_START)
+      set_OUT1;
+   
    app_regs.REG_LED_BEHAVING = (app_regs.REG_LED_BEHAVING & B_LED0_START) | B_LED1_START;
    app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED0_TO_ON) | B_LED1_TO_ON;
       
@@ -205,6 +229,9 @@ ISR(TCC0_CCA_vect, ISR_NAKED)
 {
    if (led0_mode == MODE_LED0_PWM)
    {
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+         clr_OUT0;
+      
       app_regs.REG_LED_ON = app_regs.REG_LED_ON & B_LED1_TO_ON;
 
       if (--led0.pwm.pulses == 0)
@@ -213,6 +240,8 @@ ISR(TCC0_CCA_vect, ISR_NAKED)
          
          timer_type0_stop(&TCC0);
          
+         if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_START)
+            clr_OUT0;
       }
    }
    
@@ -226,6 +255,9 @@ ISR(TCD0_CCA_vect, ISR_NAKED)
 {
    if (led1_mode == MODE_LED1_PWM)
    {
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+         clr_OUT1;
+         
       app_regs.REG_LED_ON = app_regs.REG_LED_ON & B_LED0_TO_ON;
 
       if (--led1.pwm.pulses == 0)
@@ -233,6 +265,9 @@ ISR(TCD0_CCA_vect, ISR_NAKED)
          app_regs.REG_LED_BEHAVING = app_regs.REG_LED_BEHAVING & B_LED0_START;
 
          timer_type0_stop(&TCD0);
+         
+         if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_START)
+            clr_OUT1;
       }
    }
    
@@ -247,6 +282,9 @@ ISR(TCC0_OVF_vect, ISR_NAKED)
 {
    if (led0_mode == MODE_LED0_PWM)
    {
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+         set_OUT0;
+         
       app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED1_TO_ON) | B_LED0_TO_ON;
       
       UPDATE_BOARD_LED0;
@@ -261,6 +299,10 @@ ISR(TCC0_OVF_vect, ISR_NAKED)
          if (led0.interval.off_ms == app_regs.REG_LED0_INTERVAL_OFF)
          {
             clr_LED0_TRANSISTOR;
+            
+            if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+               clr_OUT0;
+               
             UPDATE_BOARD_LED0;
             
             app_regs.REG_LED_ON = app_regs.REG_LED_ON & B_LED1_TO_ON;
@@ -271,6 +313,10 @@ ISR(TCC0_OVF_vect, ISR_NAKED)
             if (--led0.interval.pulses > 0)
             {
                set_LED0_TRANSISTOR;
+               
+               if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+                  set_OUT0;
+               
                UPDATE_BOARD_LED0;
                
                app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED1_TO_ON) | B_LED0_TO_ON;
@@ -289,10 +335,18 @@ ISR(TCC0_OVF_vect, ISR_NAKED)
                   {
                      app_regs.REG_LED_BEHAVING = app_regs.REG_LED_BEHAVING & B_LED1_START;
                      timer_type0_stop(&TCC0);
+                     
+                     if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_START)
+                        clr_OUT0;
+                     
                      reti();
                   }
 
                   set_LED0_TRANSISTOR;
+                  
+                  if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+                     set_OUT0;
+               
                   UPDATE_BOARD_LED0;
                   
                   app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED1_TO_ON) | B_LED0_TO_ON;
@@ -315,6 +369,9 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
 {
    if (led1_mode == MODE_LED1_PWM)
    {
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+         set_OUT1;
+         
       app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED0_TO_ON) | B_LED1_TO_ON;
       
       UPDATE_BOARD_LED1;
@@ -329,6 +386,10 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
          if (led1.interval.off_ms == app_regs.REG_LED1_INTERVAL_OFF)
          {
             clr_LED1_TRANSISTOR;
+            
+            if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+               clr_OUT1;
+               
             UPDATE_BOARD_LED1;
             
             app_regs.REG_LED_ON = app_regs.REG_LED_ON & B_LED0_TO_ON;
@@ -339,6 +400,10 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
             if (--led1.interval.pulses > 0)
             {
                set_LED1_TRANSISTOR;
+            
+               if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+                  set_OUT1;
+               
                UPDATE_BOARD_LED1;
                
                app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED0_TO_ON) | B_LED1_TO_ON;
@@ -357,10 +422,18 @@ ISR(TCD0_OVF_vect, ISR_NAKED)
                   {
                      app_regs.REG_LED_BEHAVING = app_regs.REG_LED_BEHAVING & B_LED0_START;
                      timer_type0_stop(&TCD0);
+                     
+                     if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_START)
+                        clr_OUT1;
+                     
                      reti();
                   }
 
                   set_LED1_TRANSISTOR;
+            
+                  if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+                     set_OUT1;
+               
                   UPDATE_BOARD_LED1;
                   
                   app_regs.REG_LED_ON = (app_regs.REG_LED_ON & B_LED0_TO_ON) | B_LED1_TO_ON;
@@ -404,6 +477,14 @@ bool app_write_REG_POWER_EN(void *a)
    if (reg & B_LED1_PWR_DIS)
       clr_LED1_PWR_ON;
       
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_PWR_EN)
+      if (read_LED0_PWR_ON)
+         set_OUT0; else clr_OUT0;
+         
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_PWR_EN)
+      if (read_LED1_PWR_ON)
+         set_OUT1; else clr_OUT1;
+      
    UPDATE_BOARD_LED0;
    UPDATE_BOARD_LED1;
 
@@ -436,6 +517,10 @@ bool app_write_REG_LED_BEHAVING(void *a)
 
       app_regs.REG_LED_BEHAVING = app_regs.REG_LED_BEHAVING & ~(B_LED0_START);
       timer_type0_stop(&TCC0);
+      
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_START)
+         clr_OUT0;
+      
       UPDATE_BOARD_LED0;
    }
 
@@ -456,6 +541,10 @@ bool app_write_REG_LED_BEHAVING(void *a)
 
       app_regs.REG_LED_BEHAVING = app_regs.REG_LED_BEHAVING & ~(B_LED1_START);
       timer_type0_stop(&TCD0);
+      
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_START)
+         clr_OUT1;
+      
       UPDATE_BOARD_LED1;
 	}
 
@@ -500,6 +589,14 @@ bool app_write_REG_LED_ON(void *a)
       UPDATE_BOARD_LED1;
    }
    
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+       if (read_LED0_TRANSISTOR)
+           set_OUT0; else clr_OUT0;
+           
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+       if (read_LED1_TRANSISTOR)
+           set_OUT1; else clr_OUT1;
+   
 	return true;
 }
 
@@ -524,8 +621,44 @@ bool app_write_REG_IN_STATE(void *a)
 /************************************************************************/
 void app_read_REG_OUT_CONFIGURATION(void) {}
 bool app_write_REG_OUT_CONFIGURATION(void *a)
-{
-	app_regs.REG_OUT_CONFIGURATION = *((uint8_t*)a);
+{   
+    if (*((uint8_t*)a) & ~(MSK_OUT0_CONF | MSK_OUT1_CONF))
+        return false;
+    
+    app_regs.REG_OUT_CONFIGURATION = *((uint8_t*)a);
+
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_SOFTWARE)
+       if (app_regs.REG_OUT_STATE & B_OUT0_TO_HIGH)
+           set_OUT0; else clr_OUT0;           
+   
+   if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_SOFTWARE)
+       if (app_regs.REG_OUT_STATE & B_OUT1_TO_HIGH)
+           set_OUT1; else clr_OUT1;
+       
+    if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_PWR_EN)
+        if (read_LED0_PWR_ON)
+           set_OUT0; else clr_OUT0;
+       
+    if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_PWR_EN)
+        if (read_LED1_PWR_ON)
+            set_OUT1; else clr_OUT1;
+       
+    if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_START)
+        if (app_regs.REG_LED_BEHAVING & B_LED0_START)
+            set_OUT0; else clr_OUT0;
+            
+    if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_START)
+        if (app_regs.REG_LED_BEHAVING & B_LED1_START)
+            set_OUT1; else clr_OUT1;
+       
+    if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+       if (read_LED0_TRANSISTOR)
+           set_OUT0; else clr_OUT0;
+           
+    if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
+        if (read_LED1_TRANSISTOR)
+            set_OUT1; else clr_OUT1;
+       
 	return true;
 }
 
@@ -1056,11 +1189,7 @@ bool app_write_REG_AUX_SUPPLY_PWR_CONF(void *a)
 /************************************************************************/
 /* REG_DUMMY0                                                           */
 /************************************************************************/
-void app_read_REG_OUT_STATE(void)
-{
-   app_regs.REG_AUX_DIG_OUT  = (read_OUT0) ? B_OUT0_TO_HIGH : 0;
-   app_regs.REG_AUX_DIG_OUT |= (read_OUT1) ? B_OUT1_TO_HIGH : 0;
-}
+void app_read_REG_OUT_STATE(void) {}
 bool app_write_REG_OUT_STATE(void *a)
 {
 	uint8_t reg = *((uint8_t*)a);
@@ -1082,6 +1211,8 @@ bool app_write_REG_OUT_STATE(void *a)
       if (reg & B_OUT1_TO_LOW)
          clr_OUT1;
    }
+   
+   app_regs.REG_OUT_STATE = reg & 7;
    
 	return true;
 }
