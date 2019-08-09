@@ -520,6 +520,9 @@ bool app_write_REG_LED_BEHAVING(void *a)
       
       if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_START)
          clr_OUT0;
+         
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT0_CONF) == GM_OUT0_LED0_ON)
+         clr_OUT0;
       
       UPDATE_BOARD_LED0;
    }
@@ -543,6 +546,9 @@ bool app_write_REG_LED_BEHAVING(void *a)
       timer_type0_stop(&TCD0);
       
       if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_START)
+         clr_OUT1;
+         
+      if ((app_regs.REG_OUT_CONFIGURATION & MSK_OUT1_CONF) == GM_OUT1_LED1_ON)
          clr_OUT1;
       
       UPDATE_BOARD_LED1;
