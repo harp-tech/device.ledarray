@@ -6,6 +6,7 @@
 #include "app_funcs.h"
 #include "app_ios_and_regs.h"
 #include "i2c.h"
+#include "fly_pit_boxes.h"
 
 /************************************************************************/
 /* Declare application registers                                        */
@@ -28,7 +29,7 @@ void hwbp_app_initialize(void)
    uint8_t hwH = 1;
    uint8_t hwL;
    uint8_t fwH = 2;
-   uint8_t fwL = 3;
+   uint8_t fwL = 4;
    uint8_t ass = 0;
    
    io_pin2in(&PORTA, 0, PULL_IO_TRISTATE, SENSE_IO_EDGES_BOTH);         // VERSION0
@@ -197,6 +198,9 @@ bool write_SMBus_word(uint8_t add, uint8_t reg, int16_t word)
 /************************************************************************/
 /* Initialization Callbacks                                             */
 /************************************************************************/
+bool SMBus_exist_on_bus0 = false;
+bool SMBus_exist_on_bus1 = false;
+
 void core_callback_1st_config_hw_after_boot(void)
 {
 	/* Initialize IOs */
@@ -253,18 +257,25 @@ void core_callback_reset_registers(void)
 	app_regs.REG_EVNT_ENABLE = B_EVT_IN_STATE | B_EVT_LED_ON;
 }
 
+bool bus_expansion_exists;
+
 void core_callback_registers_were_reinitialized(void)
 {  
    io_pin2out(&PORTD, 5, OUT_IO_DIGITAL, IN_EN_IO_EN);   // STATE
    
    /* Update Regulators with configured voltage */
    i2c0_init();
-   if (!write_SMBus_word(17, 0x22, ((int16_t) app_regs.REG_LED0_SUPPLY_PWR_CONF) * 5 -300))
-      core_func_catastrophic_error_detected();
-   if(!write_SMBus_word(33, 0x22, ((int16_t) app_regs.REG_LED1_SUPPLY_PWR_CONF) * 5 -300))
-      core_func_catastrophic_error_detected();   
-   write_SMBus_word(25, 0x22, ((int16_t) app_regs.REG_AUX_SUPPLY_PWR_CONF) * 5 -300);
    
+   bus_expansion_exists = initialize_boxes();
+   
+   if (write_SMBus_word(17, 0x22, ((int16_t) app_regs.REG_LED0_SUPPLY_PWR_CONF) * 5 -300))
+      SMBus_exist_on_bus0 = true;
+   
+   if(write_SMBus_word(33, 0x22, ((int16_t) app_regs.REG_LED1_SUPPLY_PWR_CONF) * 5 -300))
+      SMBus_exist_on_bus1 = true;
+   
+   write_SMBus_word(25, 0x22, ((int16_t) app_regs.REG_AUX_SUPPLY_PWR_CONF) * 5 -300);
+      
    app_regs.REG_LED_BEHAVING = 0;
    app_regs.REG_IN_STATE = 0;
    
@@ -393,11 +404,37 @@ void core_callback_device_to_speed(void) {}
 /************************************************************************/
 /* Callbacks: 1 ms timer                                                */
 /************************************************************************/
+uint16_t SMBus_exist_on_bus0_counter = 500;
+uint16_t SMBus_exist_on_bus1_counter = 1500;
+
 void core_callback_t_before_exec(void) {}
 void core_callback_t_after_exec(void) {}
 void core_callback_t_new_second(void) {}
 void core_callback_t_500us(void) {}
-void core_callback_t_1ms(void) {}
+void core_callback_t_1ms(void)
+{
+   if (SMBus_exist_on_bus0 == false)
+   {
+      if (++SMBus_exist_on_bus0_counter == 3000)
+      {
+         SMBus_exist_on_bus0_counter = 0;
+         
+         if (write_SMBus_word(17, 0x22, ((int16_t) app_regs.REG_LED0_SUPPLY_PWR_CONF) * 5 -300))
+            SMBus_exist_on_bus0 = true;
+      }
+   }
+   
+   if (SMBus_exist_on_bus1 == false)
+   {
+      if (++SMBus_exist_on_bus1_counter == 3000)
+      {
+         SMBus_exist_on_bus1_counter = 0;
+         
+         if(write_SMBus_word(33, 0x22, ((int16_t) app_regs.REG_LED1_SUPPLY_PWR_CONF) * 5 -300))
+            SMBus_exist_on_bus1 = true;
+      }
+   }
+}
 
 /************************************************************************/
 /* Callbacks: uart control                                              */

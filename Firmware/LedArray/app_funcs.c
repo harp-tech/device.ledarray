@@ -2,6 +2,7 @@
 #include "app_ios_and_regs.h"
 #include "hwbp_core.h"
 
+#include "fly_pit_boxes.h"
 
 /************************************************************************/
 /* Create pointers to functions                                         */
@@ -720,6 +721,8 @@ bool app_write_REG_LED0_SUPPLY_PWR_CONF(void *a)
 /************************************************************************/
 /* REG_LED1_SUPPLY_PWR_CONF                                             */
 /************************************************************************/
+extern bool bus_expansion_exists;
+
 void app_read_REG_LED1_SUPPLY_PWR_CONF(void) {}
 bool app_write_REG_LED1_SUPPLY_PWR_CONF(void *a)
 {
@@ -727,9 +730,10 @@ bool app_write_REG_LED1_SUPPLY_PWR_CONF(void *a)
 
 	if (reg < 1 || reg > 120)
 		return false;	
-
-	if (!write_SMBus_word(33, 0x22, ((int16_t) reg) * 5 -300))
-		core_func_catastrophic_error_detected();
+   
+   if (bus_expansion_exists == false)  // Check only if bus expansion exists in the bus
+	   if (!write_SMBus_word(33, 0x22, ((int16_t) reg) * 5 -300))
+		   core_func_catastrophic_error_detected();
 
 	app_regs.REG_LED1_SUPPLY_PWR_CONF = reg;
 	return true;
@@ -1231,7 +1235,9 @@ void app_read_REG_DUMMY0(void) {}
 bool app_write_REG_DUMMY0(void *a)
 {
 	uint8_t reg = *((uint8_t*)a);
-
+   
+   update_leds_on_box(reg);
+   
 	app_regs.REG_DUMMY0 = reg;
 	return true;
 }
