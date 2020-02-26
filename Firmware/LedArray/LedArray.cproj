@@ -25,7 +25,7 @@
     <preserveEEPROM>true</preserveEEPROM>
     <OverrideVtorValue>exception_table</OverrideVtorValue>
     <BootSegment>2</BootSegment>
-    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <eraseonlaunchrule>1</eraseonlaunchrule>
     <AsfFrameworkConfig>
       <framework-data xmlns="">
         <options />
@@ -48,7 +48,7 @@
         <InterfaceName>PDI</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
-      <ToolNumber>J41800031896</ToolNumber>
+      <ToolNumber>J41800039803</ToolNumber>
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
     <com_atmel_avrdbg_tool_jtagice3plus>
@@ -157,6 +157,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="app_funcs.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="fly_pit_boxes.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="i2c.c">
