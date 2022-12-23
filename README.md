@@ -2,7 +2,7 @@
 
 Controlling LED arrays that require more power. Ideally for opto-stimulation experiments.
 
-![harpledarray](./docs/assets/pcb.png)
+![harpledarray](./Assets/pcb.png)
 
 ### Key Features ###
 
