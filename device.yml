@@ -12,7 +12,7 @@ registers:
     type: U8
     maskType: LedState
     description: Control the enable of both LEDs' power supply.
-  EnableBehavior:
+  EnableLedMode:
     address: 33
     access: Write
     type: U8
@@ -99,125 +99,125 @@ registers:
     type: Float
     minValue: 0.1
     maxValue: 99.9
-    description: Sets the	PWM duty cycle (%) of LED0's when in PWM mode, between 0.1 and 99.9.
+    description: Sets the PWM duty cycle (%) of LED0's when in PWM mode, between 0.1 and 99.9.
   Led0PwmNumberPulses:
     address: 43
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	PWM number of pulses of LED0's when in PWM mode, between 1 and 65535.
+    description: Sets the PWM number of pulses of LED0's when in PWM mode, between 1 and 65535.
   LedD0IntervalOn:
     address: 44
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	time on (milliseconds) of LED0's when in interval mode, between 1 and 65535.
+    description: Sets the time on (milliseconds) of LED0's when in interval mode, between 1 and 65535.
   Led0IntervalOff:
     address: 45
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	time off (milliseconds) of LED0's when in interval mode, between 1 and 65535.
+    description: Sets the time off (milliseconds) of LED0's when in interval mode, between 1 and 65535.
   Led0IntervalNumberPulses:
     address: 46
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	number of pulses of LED0's when in interval mode, between 1 and 65535.
+    description: Sets the number of pulses of LED0's when in interval mode, between 1 and 65535.
   Led0IntervalTail:
     address: 47
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	wait time between pulses (milliseconds) of LED0's when in interval mode, between 1 and 65535.
+    description: Sets the wait time between pulses (milliseconds) of LED0's when in interval mode, between 1 and 65535.
   Led0IntervalNumberRepeats:
     address: 48
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	number of repetitions of LED0's pulse when in interval mode, between 1 and 65535.
+    description: Sets the number of repetitions of LED0's pulse when in interval mode, between 1 and 65535.
   Led1PwmFrequency:
     address: 49
     access: Write
     type: Float
     minValue: 0.5
     maxValue: 2000
-    description: Sets the	PWM frequency (Hz) of LED1's when in PWM mode, between 0.5 and 2000.
+    description: Sets the PWM frequency (Hz) of LED1's when in PWM mode, between 0.5 and 2000.
   Led1PwmDutyCycle:
     address: 50
     access: Write
     type: Float
     minValue: 0.1
     maxValue: 99.9
-    description: Sets the	PWM duty cycle (%) of LED1's when in PWM mode, between 0.1 and 99.9.
+    description: Sets the PWM duty cycle (%) of LED1's when in PWM mode, between 0.1 and 99.9.
   Led1PwmNumberPulses:
     address: 51
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	PWM number of pulses of LED1's when in PWM mode, between 1 and 65535.
+    description: Sets the PWM number of pulses of LED1's when in PWM mode, between 1 and 65535.
   Led1IntervalOn:
     address: 52
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	time on (milliseconds) of LED1's when in interval mode, between 1 and 65535.
+    description: Sets the time on (milliseconds) of LED1's when in interval mode, between 1 and 65535.
   LedD1IntervalOff:
     address: 53
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	time off (milliseconds) of LED1's when in interval mode, between 1 and 65535.
+    description: Sets the time off (milliseconds) of LED1's when in interval mode, between 1 and 65535.
   Led1IntervalNumberPulses:
     address: 54
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	number of pulses of LED1's when in interval mode, between 1 and 65535.
+    description: Sets the number of pulses of LED1's when in interval mode, between 1 and 65535.
   Led1IntervalTail:
     address: 55
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	wait time between pulses (milliseconds) of LED1's when in interval mode, between 1 and 65535.
+    description: Sets the wait time between pulses (milliseconds) of LED1's when in interval mode, between 1 and 65535.
   Led1IntervalNumberRepeats:
     address: 56
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the	number of repetitions of LED1's pulse when in interval mode, between 1 and 65535.
+    description: Sets the number of repetitions of LED1's pulse when in interval mode, between 1 and 65535.
   Led0PwmFrequencyReal:
     address: 57
     access: Read
     type: Float
-    description: Get the real	PWM frequency (Hz) of LED0's when in PWM mode.
+    description: Get the real PWM frequency (Hz) of LED0's when in PWM mode.
   Led0PwmDutyCycleReal:
     address: 58
     access: Read
     type: Float
-    description: Get the real	duty cycle (%) of LED0's when in PWM mode.
+    description: Get the real duty cycle (%) of LED0's when in PWM mode.
   Led1PwmFrequencyReal:
     address: 59
     access: Read
     type: Float
-    description: Get the real	PWM frequency (Hz) of LED1's when in PWM mode.
+    description: Get the real PWM frequency (Hz) of LED1's when in PWM mode.
   LedD1PwmDutyCycleReal:
     address: 60
     access: Read
     type: Float
-    description: Get the real	duty cycle (%) of LED1's when in PWM mode.
+    description: Get the real duty cycle (%) of LED1's when in PWM mode.
   AuxDigitalOutputState: 
     address: 61
     type: U8
@@ -309,8 +309,8 @@ groupMasks:
   LedModeConfig:
     description: Available configurations modes when LED behavior is enabled.
     values:
-      Pwm: 0
-      Interval: 1
+      PulseFrequency: 0
+      PulseTime: 1
 
 
 
