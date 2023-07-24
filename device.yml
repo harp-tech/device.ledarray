@@ -6,24 +6,21 @@ whoAmI: 1088
 firmwareVersion: "2.4"
 hardwareTargets: "1.1" # also 1.2 & 1.3
 registers:
-  EnablePower:
+  EnablePower: &ledstatereg
     address: 32
     access: Write
     type: U8
     maskType: LedState
     description: Control the enable of both LEDs' power supply.
   EnableLedMode:
+    <<: *ledstatereg
     address: 33
-    access: Write
-    type: U8
-    maskType: LedState
-    description: Start/stop the LEDs according to the behavior pulse configuration.
+    description: Start/stop the LEDs according to the pulse configuration.
   EnableLed:
+    <<: *ledstatereg
     address: 34
     access: [Write, Event]
-    type: U8
-    maskType: LedState
-    description: Enables the stimulation LEDs.
+    description: Continuously enables/disables the LEDs.
   DigitalInputState:
     address: 35
     access: Event
@@ -34,8 +31,8 @@ registers:
     address: 36
     access: Write
     type: U8
-    description: Configuration of the digital outputs functionality.
-    payloadSpec: 
+    description: Configuration of the digital outputs behavior.
+    payloadSpec:
       DO0Sync:
         description: Configuration of the DO0 functionality.
         maskType: DO0SyncConfig
@@ -45,10 +42,10 @@ registers:
         maskType: DO1SyncConfig
         mask: 0x30
   DigitalInputTrigger:
-    address: 37 
+    address: 37
     access: Write
     type: U8
-    description: Configuration of the digital inputs pins.
+    description: Configuration of the digital inputs pins behavior.
     payloadSpec:
       DI0Trigger:
         description: Configuration of the DIO input pin.
@@ -58,55 +55,52 @@ registers:
         description: Configuration of the DI1 input pin.
         maskType:  DigitalInputTriggerConfig
         mask: 0x70
-  LedMode:
+  PulseMode:
     address: 38
     access: Write
     type: U8
-    description: Sets the configuration mode of the LED when behavior is enabled.
+    description: Sets the pulse mode used by the LEDs.
     payloadSpec:
       Led0Mode:
-        description: Sets the configuration mode of the LED0 when behavior is enabled.
-        maskType: LedModeConfig
+        description: Sets the pulse mode used in LED0.
+        maskType: PulseModeConfig
         mask: 0x3
       Led1Mode:
-        description: Sets the configuration mode of the LED1 when behavior is enabled.
-        maskType: LedModeConfig
+        description: Sets the pulse mode used in LED0
+        maskType: PulseModeConfig
         mask: 0x30
-  Led0Power: 
+  Led0Power: &powereg
     address: 39
     access: Write
     type: U8
     minValue: 1
     maxValue: 120
-    description: Sets the power to be aplied to LED0, between 1 and 120.
+    description: Sets the power to LED0, between 1 and 120 (arbitrary units).
   Led1Power:
+    <<: *powereg
     address: 40
-    access: Write
-    type: U8
-    minValue: 1
-    maxValue: 120
-    description: Sets the power to be aplied to LED1, between 1 and 120.
-  Led0PulseFrequency:
+    description: Sets the power to LED1, between 1 and 120 (arbitrary units).
+  Led0PwmFrequency:
     address: 41
     access: Write
     type: Float
     minValue: 0.5
     maxValue: 2000
-    description: Sets the frequency (Hz) of LED0 when in PulseFrequency mode, between 0.5 and 2000.
-  Led0PulseFrequencyDutyCycle:
+    description: Sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.
+  Led0PwmDutyCycle:
     address: 42
     access: Write
     type: Float
     minValue: 0.1
     maxValue: 99.9
-    description: Sets the duty cycle (%) of LED0 when in PulseFrequency mode, between 0.1 and 99.9.
-  Led0PulseFrequencyNumberPulses:
+    description: Sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.
+  Led0PwmPulseCounter:
     address: 43
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the number of pulses of LED0 when in PulseFrequency mode, between 1 and 65535.
+    description: Sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.
   Led0PulseTimeOn:
     address: 44
     access: Write
@@ -121,7 +115,7 @@ registers:
     minValue: 1
     maxValue: 65535
     description: Sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
-  Led0PulseTimeNumberPulses:
+  Led0PulseTimePulseCounter:
     address: 46
     access: Write
     type: U16
@@ -135,34 +129,34 @@ registers:
     minValue: 1
     maxValue: 65535
     description: Sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
-  Led0PulseTimeNumberRepeats:
+  Led0PulseRepeatCounter:
     address: 48
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the number of repetitions of LED0 pulse when in PulseTime mode, between 1 and 65535.
-  Led1PulseFrequency:
+    description: Sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.
+  Led1PwmFrequency:
     address: 49
     access: Write
     type: Float
     minValue: 0.5
     maxValue: 2000
-    description: Sets the frequency (Hz) of LED1 when in PulseFrequency mode, between 0.5 and 2000.
-  Led1PulseFrequencyDutyCycle:
+    description: Sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.
+  Led1PwmDutyCycle:
     address: 50
     access: Write
     type: Float
     minValue: 0.1
     maxValue: 99.9
-    description: Sets the duty cycle (%) of LED1 when in PulseFrequency mode, between 0.1 and 99.9.
-  Led1PulseFrequencyNumberPulses:
+    description: Sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.
+  Led1PwmPulseCounter:
     address: 51
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the number of pulses of LED1 when in PulseFrequency mode, between 1 and 65535.
+    description: Sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.
   Led1PulseTimeOn:
     address: 52
     access: Write
@@ -177,7 +171,7 @@ registers:
     minValue: 1
     maxValue: 65535
     description: Sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
-  Led1PulseTimeNumberPulses:
+  Led1PulseTimePulseCounter:
     address: 54
     access: Write
     type: U16
@@ -191,53 +185,53 @@ registers:
     minValue: 1
     maxValue: 65535
     description: Sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
-  Led1PulseTimeNumberRepeats:
+  Led1PulseRepeatCounter:
     address: 56
     access: Write
     type: U16
     minValue: 1
     maxValue: 65535
-    description: Sets the number of repetitions of LED1 pulse when in PulseTime mode, between 1 and 65535.
-  Led0PulseFrequencyReal:
+    description: Sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.
+  Led0PwmReal:
     address: 57
     access: Read
     type: Float
-    description: Get the real frequency (Hz) of LED0 when in PulseFrequency mode.
-  Led0PulseFrequencyDutyCycleReal:
+    description: Get the real frequency (Hz) of LED0 when in Pwm mode.
+  Led0PwmDutyCycleReal:
     address: 58
     access: Read
     type: Float
-    description: Get the real duty cycle (%) of LED0 when in PulseFrequency mode.
-  Led1PulseFrequencyReal:
+    description: Get the real duty cycle (%) of LED0 when in Pwm mode.
+  Led1PwmReal:
     address: 59
     access: Read
     type: Float
-    description: Get the real frequency (Hz) of LED1 when in PulseFrequency mode.
-  LedD1PulseFrequencyDutyCycleReal:
+    description: Get the real frequency (Hz) of LED1 when in Pwm mode.
+  LedD1PwmDutyCycleReal:
     address: 60
     access: Read
     type: Float
-    description: Get the real duty cycle (%) of LED1 when in PulseFrequency mode.
-  AuxDigitalOutputState: 
+    description: Get the real duty cycle (%) of LED1 when in Pwm mode.
+  AuxDigitalOutputState:
     address: 61
     type: U8
     access: Write
     maskType: AuxDigitalOutputs
-    description: Write the state of the auxiliar digital output bit.
+    description: Write the state of the auxiliary digital output bit.
   AuxLedPower:
     address: 62
     access: Write
     type: U8
     minValue: 1
     maxValue: 120
-    description: Sets the power to be aplied to auxiliary LED, between 1 and 120.
-  DigitalOutputState: 
+    description: Sets the power to be applied to auxiliary LED, between 1 and 120.
+  DigitalOutputState:
     address: 63
     type: U8
     access: Write
     maskType: DigitalOutputs
     description: Write the state of digital output lines.
-  Reserved0: 
+  Reserved0: &reserved
     address: 64
     type: U8
     access: Read
@@ -253,7 +247,7 @@ bitMasks:
   LedState:
     description: Specifies the LEDs state.
     bits:
-      LedD0On: 0x1
+      Led0On: 0x1
       Led1On: 0x2
       Led0Off: 0x4
       Led1Off: 0x8
@@ -265,17 +259,17 @@ bitMasks:
   AuxDigitalOutputs:
     description: Specifies the state of the auxiliary digital output lines.
     bits:
-      Aux0High: 0x1
-      Aux1High: 0x2
-      Aux0Low: 0x4
-      Aux1Low: 0x8
+      Aux0Set: 0x1
+      Aux1Set: 0x2
+      Aux0Clear: 0x4
+      Aux1Clear: 0x8
   DigitalOutputs:
     description: Specifies the state of port digital output lines.
     bits:
-      DO0High: 0x1
-      DO1High: 0x2
-      DO0Low: 0x4
-      DO1Low: 0x8
+      DO0Set: 0x1
+      DO1Set: 0x2
+      DO0Clear: 0x4
+      DO1Clear: 0x8
   LedArrayEvents:
     description: The events that can be enabled/disabled.
     bits:
@@ -306,18 +300,8 @@ groupMasks:
       Led1EnableBehavior: 4
       Led1EnableLed: 5
       None: 6
-  LedModeConfig:
+  PulseModeConfig:
     description: Available configurations modes when LED behavior is enabled.
     values:
-      PulseFrequency: 0
+      Pwm: 0
       PulseTime: 1
-
-
-
-
-
-      
-
-
-
-
