@@ -20,7 +20,7 @@ registers:
     <<: *ledstatereg
     address: 34
     access: [Write, Event]
-    description: Continuously enables/disables the LEDs.
+    description: Enables/disables the LEDs.
   DigitalInputState:
     address: 35
     access: Event
