@@ -51,7 +51,7 @@ namespace Harp.LedArray
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<LEDs> ReadEnablePowerAsync()
+        public async Task<LedState> ReadEnablePowerAsync()
         {
             var reply = await CommandAsync(HarpCommand.ReadByte(EnablePower.Address));
             return EnablePower.GetPayload(reply);
@@ -64,7 +64,7 @@ namespace Harp.LedArray
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<LEDs>> ReadTimestampedEnablePowerAsync()
+        public async Task<Timestamped<LedState>> ReadTimestampedEnablePowerAsync()
         {
             var reply = await CommandAsync(HarpCommand.ReadByte(EnablePower.Address));
             return EnablePower.GetTimestampedPayload(reply);
@@ -75,83 +75,83 @@ namespace Harp.LedArray
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteEnablePowerAsync(LEDs value)
+        public async Task WriteEnablePowerAsync(LedState value)
         {
             var request = EnablePower.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the EnableBehavior register.
+        /// Asynchronously reads the contents of the EnableLedMode register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<LEDs> ReadEnableBehaviorAsync()
+        public async Task<LedState> ReadEnableLedModeAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(EnableBehavior.Address));
-            return EnableBehavior.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(EnableLedMode.Address));
+            return EnableLedMode.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the EnableBehavior register.
+        /// Asynchronously reads the timestamped contents of the EnableLedMode register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<LEDs>> ReadTimestampedEnableBehaviorAsync()
+        public async Task<Timestamped<LedState>> ReadTimestampedEnableLedModeAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(EnableBehavior.Address));
-            return EnableBehavior.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(EnableLedMode.Address));
+            return EnableLedMode.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the EnableBehavior register.
+        /// Asynchronously writes a value to the EnableLedMode register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteEnableBehaviorAsync(LEDs value)
+        public async Task WriteEnableLedModeAsync(LedState value)
         {
-            var request = EnableBehavior.FromPayload(MessageType.Write, value);
+            var request = EnableLedMode.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the EnableLED register.
+        /// Asynchronously reads the contents of the EnableLed register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<LEDs> ReadEnableLEDAsync()
+        public async Task<LedState> ReadEnableLedAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(EnableLED.Address));
-            return EnableLED.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(EnableLed.Address));
+            return EnableLed.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the EnableLED register.
+        /// Asynchronously reads the timestamped contents of the EnableLed register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<LEDs>> ReadTimestampedEnableLEDAsync()
+        public async Task<Timestamped<LedState>> ReadTimestampedEnableLedAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(EnableLED.Address));
-            return EnableLED.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(EnableLed.Address));
+            return EnableLed.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the EnableLED register.
+        /// Asynchronously writes a value to the EnableLed register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteEnableLEDAsync(LEDs value)
+        public async Task WriteEnableLedAsync(LedState value)
         {
-            var request = EnableLED.FromPayload(MessageType.Write, value);
+            var request = EnableLed.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
@@ -256,810 +256,810 @@ namespace Harp.LedArray
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LEDMode register.
+        /// Asynchronously reads the contents of the PulseMode register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<LEDModePayload> ReadLEDModeAsync()
+        public async Task<PulseModePayload> ReadPulseModeAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(LEDMode.Address));
-            return LEDMode.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(PulseMode.Address));
+            return PulseMode.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LEDMode register.
+        /// Asynchronously reads the timestamped contents of the PulseMode register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<LEDModePayload>> ReadTimestampedLEDModeAsync()
+        public async Task<Timestamped<PulseModePayload>> ReadTimestampedPulseModeAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(LEDMode.Address));
-            return LEDMode.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(PulseMode.Address));
+            return PulseMode.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LEDMode register.
+        /// Asynchronously writes a value to the PulseMode register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLEDModeAsync(LEDModePayload value)
+        public async Task WritePulseModeAsync(PulseModePayload value)
         {
-            var request = LEDMode.FromPayload(MessageType.Write, value);
+            var request = PulseMode.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0Power register.
+        /// Asynchronously reads the contents of the Led0Power register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<byte> ReadLED0PowerAsync()
+        public async Task<byte> ReadLed0PowerAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(LED0Power.Address));
-            return LED0Power.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(Led0Power.Address));
+            return Led0Power.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0Power register.
+        /// Asynchronously reads the timestamped contents of the Led0Power register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<byte>> ReadTimestampedLED0PowerAsync()
+        public async Task<Timestamped<byte>> ReadTimestampedLed0PowerAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(LED0Power.Address));
-            return LED0Power.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(Led0Power.Address));
+            return Led0Power.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED0Power register.
+        /// Asynchronously writes a value to the Led0Power register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED0PowerAsync(byte value)
+        public async Task WriteLed0PowerAsync(byte value)
         {
-            var request = LED0Power.FromPayload(MessageType.Write, value);
+            var request = Led0Power.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1Power register.
+        /// Asynchronously reads the contents of the Led1Power register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<byte> ReadLED1PowerAsync()
+        public async Task<byte> ReadLed1PowerAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(LED1Power.Address));
-            return LED1Power.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(Led1Power.Address));
+            return Led1Power.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1Power register.
+        /// Asynchronously reads the timestamped contents of the Led1Power register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<byte>> ReadTimestampedLED1PowerAsync()
+        public async Task<Timestamped<byte>> ReadTimestampedLed1PowerAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(LED1Power.Address));
-            return LED1Power.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(Led1Power.Address));
+            return Led1Power.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED1Power register.
+        /// Asynchronously writes a value to the Led1Power register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED1PowerAsync(byte value)
+        public async Task WriteLed1PowerAsync(byte value)
         {
-            var request = LED1Power.FromPayload(MessageType.Write, value);
+            var request = Led1Power.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0PWMFrequency register.
+        /// Asynchronously reads the contents of the Led0PwmFrequency register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<float> ReadLED0PWMFrequencyAsync()
+        public async Task<float> ReadLed0PwmFrequencyAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED0PWMFrequency.Address));
-            return LED0PWMFrequency.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led0PwmFrequency.Address));
+            return Led0PwmFrequency.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0PWMFrequency register.
+        /// Asynchronously reads the timestamped contents of the Led0PwmFrequency register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<float>> ReadTimestampedLED0PWMFrequencyAsync()
+        public async Task<Timestamped<float>> ReadTimestampedLed0PwmFrequencyAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED0PWMFrequency.Address));
-            return LED0PWMFrequency.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led0PwmFrequency.Address));
+            return Led0PwmFrequency.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED0PWMFrequency register.
+        /// Asynchronously writes a value to the Led0PwmFrequency register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED0PWMFrequencyAsync(float value)
+        public async Task WriteLed0PwmFrequencyAsync(float value)
         {
-            var request = LED0PWMFrequency.FromPayload(MessageType.Write, value);
+            var request = Led0PwmFrequency.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0PWMDutyCycle register.
+        /// Asynchronously reads the contents of the Led0PwmDutyCycle register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<float> ReadLED0PWMDutyCycleAsync()
+        public async Task<float> ReadLed0PwmDutyCycleAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED0PWMDutyCycle.Address));
-            return LED0PWMDutyCycle.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led0PwmDutyCycle.Address));
+            return Led0PwmDutyCycle.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0PWMDutyCycle register.
+        /// Asynchronously reads the timestamped contents of the Led0PwmDutyCycle register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<float>> ReadTimestampedLED0PWMDutyCycleAsync()
+        public async Task<Timestamped<float>> ReadTimestampedLed0PwmDutyCycleAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED0PWMDutyCycle.Address));
-            return LED0PWMDutyCycle.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led0PwmDutyCycle.Address));
+            return Led0PwmDutyCycle.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED0PWMDutyCycle register.
+        /// Asynchronously writes a value to the Led0PwmDutyCycle register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED0PWMDutyCycleAsync(float value)
+        public async Task WriteLed0PwmDutyCycleAsync(float value)
         {
-            var request = LED0PWMDutyCycle.FromPayload(MessageType.Write, value);
+            var request = Led0PwmDutyCycle.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0PWMNumberPulses register.
+        /// Asynchronously reads the contents of the Led0PwmPulseCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED0PWMNumberPulsesAsync()
+        public async Task<ushort> ReadLed0PwmPulseCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0PWMNumberPulses.Address));
-            return LED0PWMNumberPulses.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PwmPulseCounter.Address));
+            return Led0PwmPulseCounter.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0PWMNumberPulses register.
+        /// Asynchronously reads the timestamped contents of the Led0PwmPulseCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED0PWMNumberPulsesAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed0PwmPulseCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0PWMNumberPulses.Address));
-            return LED0PWMNumberPulses.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PwmPulseCounter.Address));
+            return Led0PwmPulseCounter.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED0PWMNumberPulses register.
+        /// Asynchronously writes a value to the Led0PwmPulseCounter register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED0PWMNumberPulsesAsync(ushort value)
+        public async Task WriteLed0PwmPulseCounterAsync(ushort value)
         {
-            var request = LED0PWMNumberPulses.FromPayload(MessageType.Write, value);
+            var request = Led0PwmPulseCounter.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0IntervalOn register.
+        /// Asynchronously reads the contents of the Led0PulseTimeOn register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED0IntervalOnAsync()
+        public async Task<ushort> ReadLed0PulseTimeOnAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalOn.Address));
-            return LED0IntervalOn.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseTimeOn.Address));
+            return Led0PulseTimeOn.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0IntervalOn register.
+        /// Asynchronously reads the timestamped contents of the Led0PulseTimeOn register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED0IntervalOnAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed0PulseTimeOnAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalOn.Address));
-            return LED0IntervalOn.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseTimeOn.Address));
+            return Led0PulseTimeOn.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED0IntervalOn register.
+        /// Asynchronously writes a value to the Led0PulseTimeOn register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED0IntervalOnAsync(ushort value)
+        public async Task WriteLed0PulseTimeOnAsync(ushort value)
         {
-            var request = LED0IntervalOn.FromPayload(MessageType.Write, value);
+            var request = Led0PulseTimeOn.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0IntervalOff register.
+        /// Asynchronously reads the contents of the Led0PulseTimeOff register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED0IntervalOffAsync()
+        public async Task<ushort> ReadLed0PulseTimeOffAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalOff.Address));
-            return LED0IntervalOff.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseTimeOff.Address));
+            return Led0PulseTimeOff.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0IntervalOff register.
+        /// Asynchronously reads the timestamped contents of the Led0PulseTimeOff register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED0IntervalOffAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed0PulseTimeOffAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalOff.Address));
-            return LED0IntervalOff.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseTimeOff.Address));
+            return Led0PulseTimeOff.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED0IntervalOff register.
+        /// Asynchronously writes a value to the Led0PulseTimeOff register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED0IntervalOffAsync(ushort value)
+        public async Task WriteLed0PulseTimeOffAsync(ushort value)
         {
-            var request = LED0IntervalOff.FromPayload(MessageType.Write, value);
+            var request = Led0PulseTimeOff.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0IntervalNumberPulses register.
+        /// Asynchronously reads the contents of the Led0PulseTimePulseCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED0IntervalNumberPulsesAsync()
+        public async Task<ushort> ReadLed0PulseTimePulseCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalNumberPulses.Address));
-            return LED0IntervalNumberPulses.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseTimePulseCounter.Address));
+            return Led0PulseTimePulseCounter.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0IntervalNumberPulses register.
+        /// Asynchronously reads the timestamped contents of the Led0PulseTimePulseCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED0IntervalNumberPulsesAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed0PulseTimePulseCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalNumberPulses.Address));
-            return LED0IntervalNumberPulses.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseTimePulseCounter.Address));
+            return Led0PulseTimePulseCounter.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED0IntervalNumberPulses register.
+        /// Asynchronously writes a value to the Led0PulseTimePulseCounter register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED0IntervalNumberPulsesAsync(ushort value)
+        public async Task WriteLed0PulseTimePulseCounterAsync(ushort value)
         {
-            var request = LED0IntervalNumberPulses.FromPayload(MessageType.Write, value);
+            var request = Led0PulseTimePulseCounter.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0IntervalTail register.
+        /// Asynchronously reads the contents of the Led0PulseTimeTail register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED0IntervalTailAsync()
+        public async Task<ushort> ReadLed0PulseTimeTailAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalTail.Address));
-            return LED0IntervalTail.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseTimeTail.Address));
+            return Led0PulseTimeTail.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0IntervalTail register.
+        /// Asynchronously reads the timestamped contents of the Led0PulseTimeTail register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED0IntervalTailAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed0PulseTimeTailAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalTail.Address));
-            return LED0IntervalTail.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseTimeTail.Address));
+            return Led0PulseTimeTail.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED0IntervalTail register.
+        /// Asynchronously writes a value to the Led0PulseTimeTail register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED0IntervalTailAsync(ushort value)
+        public async Task WriteLed0PulseTimeTailAsync(ushort value)
         {
-            var request = LED0IntervalTail.FromPayload(MessageType.Write, value);
+            var request = Led0PulseTimeTail.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0IntervalNumberRepeats register.
+        /// Asynchronously reads the contents of the Led0PulseRepeatCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED0IntervalNumberRepeatsAsync()
+        public async Task<ushort> ReadLed0PulseRepeatCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalNumberRepeats.Address));
-            return LED0IntervalNumberRepeats.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseRepeatCounter.Address));
+            return Led0PulseRepeatCounter.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0IntervalNumberRepeats register.
+        /// Asynchronously reads the timestamped contents of the Led0PulseRepeatCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED0IntervalNumberRepeatsAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed0PulseRepeatCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED0IntervalNumberRepeats.Address));
-            return LED0IntervalNumberRepeats.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led0PulseRepeatCounter.Address));
+            return Led0PulseRepeatCounter.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED0IntervalNumberRepeats register.
+        /// Asynchronously writes a value to the Led0PulseRepeatCounter register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED0IntervalNumberRepeatsAsync(ushort value)
+        public async Task WriteLed0PulseRepeatCounterAsync(ushort value)
         {
-            var request = LED0IntervalNumberRepeats.FromPayload(MessageType.Write, value);
+            var request = Led0PulseRepeatCounter.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1PWMFrequency register.
+        /// Asynchronously reads the contents of the Led1PwmFrequency register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<float> ReadLED1PWMFrequencyAsync()
+        public async Task<float> ReadLed1PwmFrequencyAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED1PWMFrequency.Address));
-            return LED1PWMFrequency.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led1PwmFrequency.Address));
+            return Led1PwmFrequency.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1PWMFrequency register.
+        /// Asynchronously reads the timestamped contents of the Led1PwmFrequency register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<float>> ReadTimestampedLED1PWMFrequencyAsync()
+        public async Task<Timestamped<float>> ReadTimestampedLed1PwmFrequencyAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED1PWMFrequency.Address));
-            return LED1PWMFrequency.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led1PwmFrequency.Address));
+            return Led1PwmFrequency.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED1PWMFrequency register.
+        /// Asynchronously writes a value to the Led1PwmFrequency register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED1PWMFrequencyAsync(float value)
+        public async Task WriteLed1PwmFrequencyAsync(float value)
         {
-            var request = LED1PWMFrequency.FromPayload(MessageType.Write, value);
+            var request = Led1PwmFrequency.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1PWMDutyCycle register.
+        /// Asynchronously reads the contents of the Led1PwmDutyCycle register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<float> ReadLED1PWMDutyCycleAsync()
+        public async Task<float> ReadLed1PwmDutyCycleAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED1PWMDutyCycle.Address));
-            return LED1PWMDutyCycle.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led1PwmDutyCycle.Address));
+            return Led1PwmDutyCycle.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1PWMDutyCycle register.
+        /// Asynchronously reads the timestamped contents of the Led1PwmDutyCycle register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<float>> ReadTimestampedLED1PWMDutyCycleAsync()
+        public async Task<Timestamped<float>> ReadTimestampedLed1PwmDutyCycleAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED1PWMDutyCycle.Address));
-            return LED1PWMDutyCycle.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led1PwmDutyCycle.Address));
+            return Led1PwmDutyCycle.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED1PWMDutyCycle register.
+        /// Asynchronously writes a value to the Led1PwmDutyCycle register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED1PWMDutyCycleAsync(float value)
+        public async Task WriteLed1PwmDutyCycleAsync(float value)
         {
-            var request = LED1PWMDutyCycle.FromPayload(MessageType.Write, value);
+            var request = Led1PwmDutyCycle.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1PWMNumberPulses register.
+        /// Asynchronously reads the contents of the Led1PwmPulseCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED1PWMNumberPulsesAsync()
+        public async Task<ushort> ReadLed1PwmPulseCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1PWMNumberPulses.Address));
-            return LED1PWMNumberPulses.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PwmPulseCounter.Address));
+            return Led1PwmPulseCounter.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1PWMNumberPulses register.
+        /// Asynchronously reads the timestamped contents of the Led1PwmPulseCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED1PWMNumberPulsesAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed1PwmPulseCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1PWMNumberPulses.Address));
-            return LED1PWMNumberPulses.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PwmPulseCounter.Address));
+            return Led1PwmPulseCounter.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED1PWMNumberPulses register.
+        /// Asynchronously writes a value to the Led1PwmPulseCounter register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED1PWMNumberPulsesAsync(ushort value)
+        public async Task WriteLed1PwmPulseCounterAsync(ushort value)
         {
-            var request = LED1PWMNumberPulses.FromPayload(MessageType.Write, value);
+            var request = Led1PwmPulseCounter.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1IntervalOn register.
+        /// Asynchronously reads the contents of the Led1PulseTimeOn register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED1IntervalOnAsync()
+        public async Task<ushort> ReadLed1PulseTimeOnAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalOn.Address));
-            return LED1IntervalOn.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseTimeOn.Address));
+            return Led1PulseTimeOn.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1IntervalOn register.
+        /// Asynchronously reads the timestamped contents of the Led1PulseTimeOn register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED1IntervalOnAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed1PulseTimeOnAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalOn.Address));
-            return LED1IntervalOn.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseTimeOn.Address));
+            return Led1PulseTimeOn.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED1IntervalOn register.
+        /// Asynchronously writes a value to the Led1PulseTimeOn register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED1IntervalOnAsync(ushort value)
+        public async Task WriteLed1PulseTimeOnAsync(ushort value)
         {
-            var request = LED1IntervalOn.FromPayload(MessageType.Write, value);
+            var request = Led1PulseTimeOn.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1IntervalOff register.
+        /// Asynchronously reads the contents of the Led1PulseTimeOff register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED1IntervalOffAsync()
+        public async Task<ushort> ReadLed1PulseTimeOffAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalOff.Address));
-            return LED1IntervalOff.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseTimeOff.Address));
+            return Led1PulseTimeOff.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1IntervalOff register.
+        /// Asynchronously reads the timestamped contents of the Led1PulseTimeOff register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED1IntervalOffAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed1PulseTimeOffAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalOff.Address));
-            return LED1IntervalOff.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseTimeOff.Address));
+            return Led1PulseTimeOff.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED1IntervalOff register.
+        /// Asynchronously writes a value to the Led1PulseTimeOff register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED1IntervalOffAsync(ushort value)
+        public async Task WriteLed1PulseTimeOffAsync(ushort value)
         {
-            var request = LED1IntervalOff.FromPayload(MessageType.Write, value);
+            var request = Led1PulseTimeOff.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1IntervalNumberPulses register.
+        /// Asynchronously reads the contents of the Led1PulseTimePulseCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED1IntervalNumberPulsesAsync()
+        public async Task<ushort> ReadLed1PulseTimePulseCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalNumberPulses.Address));
-            return LED1IntervalNumberPulses.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseTimePulseCounter.Address));
+            return Led1PulseTimePulseCounter.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1IntervalNumberPulses register.
+        /// Asynchronously reads the timestamped contents of the Led1PulseTimePulseCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED1IntervalNumberPulsesAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed1PulseTimePulseCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalNumberPulses.Address));
-            return LED1IntervalNumberPulses.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseTimePulseCounter.Address));
+            return Led1PulseTimePulseCounter.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED1IntervalNumberPulses register.
+        /// Asynchronously writes a value to the Led1PulseTimePulseCounter register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED1IntervalNumberPulsesAsync(ushort value)
+        public async Task WriteLed1PulseTimePulseCounterAsync(ushort value)
         {
-            var request = LED1IntervalNumberPulses.FromPayload(MessageType.Write, value);
+            var request = Led1PulseTimePulseCounter.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1IntervalTail register.
+        /// Asynchronously reads the contents of the Led1PulseTimeTail register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED1IntervalTailAsync()
+        public async Task<ushort> ReadLed1PulseTimeTailAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalTail.Address));
-            return LED1IntervalTail.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseTimeTail.Address));
+            return Led1PulseTimeTail.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1IntervalTail register.
+        /// Asynchronously reads the timestamped contents of the Led1PulseTimeTail register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED1IntervalTailAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed1PulseTimeTailAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalTail.Address));
-            return LED1IntervalTail.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseTimeTail.Address));
+            return Led1PulseTimeTail.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED1IntervalTail register.
+        /// Asynchronously writes a value to the Led1PulseTimeTail register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED1IntervalTailAsync(ushort value)
+        public async Task WriteLed1PulseTimeTailAsync(ushort value)
         {
-            var request = LED1IntervalTail.FromPayload(MessageType.Write, value);
+            var request = Led1PulseTimeTail.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1IntervalNumberRepeats register.
+        /// Asynchronously reads the contents of the Led1PulseRepeatCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<ushort> ReadLED1IntervalNumberRepeatsAsync()
+        public async Task<ushort> ReadLed1PulseRepeatCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalNumberRepeats.Address));
-            return LED1IntervalNumberRepeats.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseRepeatCounter.Address));
+            return Led1PulseRepeatCounter.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1IntervalNumberRepeats register.
+        /// Asynchronously reads the timestamped contents of the Led1PulseRepeatCounter register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<ushort>> ReadTimestampedLED1IntervalNumberRepeatsAsync()
+        public async Task<Timestamped<ushort>> ReadTimestampedLed1PulseRepeatCounterAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadUInt16(LED1IntervalNumberRepeats.Address));
-            return LED1IntervalNumberRepeats.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadUInt16(Led1PulseRepeatCounter.Address));
+            return Led1PulseRepeatCounter.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the LED1IntervalNumberRepeats register.
+        /// Asynchronously writes a value to the Led1PulseRepeatCounter register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteLED1IntervalNumberRepeatsAsync(ushort value)
+        public async Task WriteLed1PulseRepeatCounterAsync(ushort value)
         {
-            var request = LED1IntervalNumberRepeats.FromPayload(MessageType.Write, value);
+            var request = Led1PulseRepeatCounter.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0PWMFrequencyReal register.
+        /// Asynchronously reads the contents of the Led0PwmReal register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<float> ReadLED0PWMFrequencyRealAsync()
+        public async Task<float> ReadLed0PwmRealAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED0PWMFrequencyReal.Address));
-            return LED0PWMFrequencyReal.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led0PwmReal.Address));
+            return Led0PwmReal.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0PWMFrequencyReal register.
+        /// Asynchronously reads the timestamped contents of the Led0PwmReal register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<float>> ReadTimestampedLED0PWMFrequencyRealAsync()
+        public async Task<Timestamped<float>> ReadTimestampedLed0PwmRealAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED0PWMFrequencyReal.Address));
-            return LED0PWMFrequencyReal.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led0PwmReal.Address));
+            return Led0PwmReal.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED0PWMDutyCycleReal register.
+        /// Asynchronously reads the contents of the Led0PwmDutyCycleReal register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<float> ReadLED0PWMDutyCycleRealAsync()
+        public async Task<float> ReadLed0PwmDutyCycleRealAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED0PWMDutyCycleReal.Address));
-            return LED0PWMDutyCycleReal.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led0PwmDutyCycleReal.Address));
+            return Led0PwmDutyCycleReal.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED0PWMDutyCycleReal register.
+        /// Asynchronously reads the timestamped contents of the Led0PwmDutyCycleReal register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<float>> ReadTimestampedLED0PWMDutyCycleRealAsync()
+        public async Task<Timestamped<float>> ReadTimestampedLed0PwmDutyCycleRealAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED0PWMDutyCycleReal.Address));
-            return LED0PWMDutyCycleReal.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led0PwmDutyCycleReal.Address));
+            return Led0PwmDutyCycleReal.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1PWMFrequencyReal register.
+        /// Asynchronously reads the contents of the Led1PwmReal register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<float> ReadLED1PWMFrequencyRealAsync()
+        public async Task<float> ReadLed1PwmRealAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED1PWMFrequencyReal.Address));
-            return LED1PWMFrequencyReal.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led1PwmReal.Address));
+            return Led1PwmReal.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1PWMFrequencyReal register.
+        /// Asynchronously reads the timestamped contents of the Led1PwmReal register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<float>> ReadTimestampedLED1PWMFrequencyRealAsync()
+        public async Task<Timestamped<float>> ReadTimestampedLed1PwmRealAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED1PWMFrequencyReal.Address));
-            return LED1PWMFrequencyReal.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(Led1PwmReal.Address));
+            return Led1PwmReal.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the LED1PWMDutyCycleReal register.
+        /// Asynchronously reads the contents of the LedD1PwmDutyCycleReal register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<float> ReadLED1PWMDutyCycleRealAsync()
+        public async Task<float> ReadLedD1PwmDutyCycleRealAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED1PWMDutyCycleReal.Address));
-            return LED1PWMDutyCycleReal.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(LedD1PwmDutyCycleReal.Address));
+            return LedD1PwmDutyCycleReal.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the LED1PWMDutyCycleReal register.
+        /// Asynchronously reads the timestamped contents of the LedD1PwmDutyCycleReal register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<float>> ReadTimestampedLED1PWMDutyCycleRealAsync()
+        public async Task<Timestamped<float>> ReadTimestampedLedD1PwmDutyCycleRealAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadSingle(LED1PWMDutyCycleReal.Address));
-            return LED1PWMDutyCycleReal.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadSingle(LedD1PwmDutyCycleReal.Address));
+            return LedD1PwmDutyCycleReal.GetTimestampedPayload(reply);
         }
 
         /// <summary>
@@ -1100,39 +1100,39 @@ namespace Harp.LedArray
         }
 
         /// <summary>
-        /// Asynchronously reads the contents of the AuxLEDPower register.
+        /// Asynchronously reads the contents of the AuxLedPower register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the register payload.
         /// </returns>
-        public async Task<byte> ReadAuxLEDPowerAsync()
+        public async Task<byte> ReadAuxLedPowerAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(AuxLEDPower.Address));
-            return AuxLEDPower.GetPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(AuxLedPower.Address));
+            return AuxLedPower.GetPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously reads the timestamped contents of the AuxLEDPower register.
+        /// Asynchronously reads the timestamped contents of the AuxLedPower register.
         /// </summary>
         /// <returns>
         /// A task that represents the asynchronous read operation. The <see cref="Task{TResult}.Result"/>
         /// property contains the timestamped register payload.
         /// </returns>
-        public async Task<Timestamped<byte>> ReadTimestampedAuxLEDPowerAsync()
+        public async Task<Timestamped<byte>> ReadTimestampedAuxLedPowerAsync()
         {
-            var reply = await CommandAsync(HarpCommand.ReadByte(AuxLEDPower.Address));
-            return AuxLEDPower.GetTimestampedPayload(reply);
+            var reply = await CommandAsync(HarpCommand.ReadByte(AuxLedPower.Address));
+            return AuxLedPower.GetTimestampedPayload(reply);
         }
 
         /// <summary>
-        /// Asynchronously writes a value to the AuxLEDPower register.
+        /// Asynchronously writes a value to the AuxLedPower register.
         /// </summary>
         /// <param name="value">The value to be stored in the register.</param>
         /// <returns>The task object representing the asynchronous write operation.</returns>
-        public async Task WriteAuxLEDPowerAsync(byte value)
+        public async Task WriteAuxLedPowerAsync(byte value)
         {
-            var request = AuxLEDPower.FromPayload(MessageType.Write, value);
+            var request = AuxLedPower.FromPayload(MessageType.Write, value);
             await CommandAsync(request);
         }
 
