@@ -1,0 +1,25 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{0A7A57A4-A5B3-4593-B541-3679E6AECDBE}") = "Harp.LedArray", "Harp.LedArray\Harp.LedArray.csproj", "{C579FB15-4EFB-4C52-B403-5A1049498981}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C579FB15-4EFB-4C52-B403-5A1049498981}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C579FB15-4EFB-4C52-B403-5A1049498981}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C579FB15-4EFB-4C52-B403-5A1049498981}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C579FB15-4EFB-4C52-B403-5A1049498981}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F5D812FF-2C9D-45DD-ACE4-397D9B23EA75}
+	EndGlobalSection
+EndGlobal
