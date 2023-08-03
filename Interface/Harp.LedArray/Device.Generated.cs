@@ -165,12 +165,12 @@ namespace Harp.LedArray
     [XmlInclude(typeof(DigitalOutputState))]
     [XmlInclude(typeof(EnableEvents))]
     [Description("Filters register-specific messages reported by the LedArray device.")]
-    public class FilterMessage : FilterMessageBuilder, INamedElement
+    public class FilterRegister : FilterRegisterBuilder, INamedElement
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FilterMessage"/> class.
+        /// Initializes a new instance of the <see cref="FilterRegister"/> class.
         /// </summary>
-        public FilterMessage()
+        public FilterRegister()
         {
             Register = new EnablePower();
         }
@@ -3678,6 +3678,39 @@ namespace Harp.LedArray
     [XmlInclude(typeof(CreateAuxLedPowerPayload))]
     [XmlInclude(typeof(CreateDigitalOutputStatePayload))]
     [XmlInclude(typeof(CreateEnableEventsPayload))]
+    [XmlInclude(typeof(CreateTimestampedEnablePowerPayload))]
+    [XmlInclude(typeof(CreateTimestampedEnableLedModePayload))]
+    [XmlInclude(typeof(CreateTimestampedEnableLedPayload))]
+    [XmlInclude(typeof(CreateTimestampedDigitalInputStatePayload))]
+    [XmlInclude(typeof(CreateTimestampedDigitalOutputSyncPayload))]
+    [XmlInclude(typeof(CreateTimestampedDigitalInputTriggerPayload))]
+    [XmlInclude(typeof(CreateTimestampedPulseModePayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PowerPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PowerPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PwmFrequencyPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PwmDutyCyclePayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PwmPulseCounterPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PulseTimeOnPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PulseTimeOffPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PulseTimePulseCounterPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PulseTimeTailPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PulseRepeatCounterPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PwmFrequencyPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PwmDutyCyclePayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PwmPulseCounterPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PulseTimeOnPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PulseTimeOffPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PulseTimePulseCounterPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PulseTimeTailPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PulseRepeatCounterPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PwmRealPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed0PwmDutyCycleRealPayload))]
+    [XmlInclude(typeof(CreateTimestampedLed1PwmRealPayload))]
+    [XmlInclude(typeof(CreateTimestampedLedD1PwmDutyCycleRealPayload))]
+    [XmlInclude(typeof(CreateTimestampedAuxDigitalOutputStatePayload))]
+    [XmlInclude(typeof(CreateTimestampedAuxLedPowerPayload))]
+    [XmlInclude(typeof(CreateTimestampedDigitalOutputStatePayload))]
+    [XmlInclude(typeof(CreateTimestampedEnableEventsPayload))]
     [Description("Creates standard message payloads for the LedArray device.")]
     public partial class CreateMessage : CreateMessageBuilder, INamedElement
     {
@@ -3693,205 +3726,228 @@ namespace Harp.LedArray
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a message payload
     /// that control the enable of both LEDs' power supply.
     /// </summary>
     [DisplayName("EnablePowerPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that control the enable of both LEDs' power supply.")]
-    public partial class CreateEnablePowerPayload : HarpCombinator
+    [Description("Creates a message payload that control the enable of both LEDs' power supply.")]
+    public partial class CreateEnablePowerPayload
     {
         /// <summary>
         /// Gets or sets the value that control the enable of both LEDs' power supply.
         /// </summary>
         [Description("The value that control the enable of both LEDs' power supply.")]
-        public LedState Value { get; set; }
+        public LedState EnablePower { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that control the enable of both LEDs' power supply.
+        /// Creates a message payload for the EnablePower register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public LedState GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return EnablePower;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that control the enable of both LEDs' power supply.
+        /// Creates a message that control the enable of both LEDs' power supply.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the EnablePower register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => EnablePower.FromPayload(MessageType, Value));
+            return Harp.LedArray.EnablePower.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that control the enable of both LEDs' power supply.
+    /// </summary>
+    [DisplayName("TimestampedEnablePowerPayload")]
+    [Description("Creates a timestamped message payload that control the enable of both LEDs' power supply.")]
+    public partial class CreateTimestampedEnablePowerPayload : CreateEnablePowerPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that control the enable of both LEDs' power supply.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the EnablePower register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.EnablePower.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that start/stop the LEDs according to the pulse configuration.
     /// </summary>
     [DisplayName("EnableLedModePayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that start/stop the LEDs according to the pulse configuration.")]
-    public partial class CreateEnableLedModePayload : HarpCombinator
+    [Description("Creates a message payload that start/stop the LEDs according to the pulse configuration.")]
+    public partial class CreateEnableLedModePayload
     {
         /// <summary>
         /// Gets or sets the value that start/stop the LEDs according to the pulse configuration.
         /// </summary>
         [Description("The value that start/stop the LEDs according to the pulse configuration.")]
-        public LedState Value { get; set; }
+        public LedState EnableLedMode { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that start/stop the LEDs according to the pulse configuration.
+        /// Creates a message payload for the EnableLedMode register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public LedState GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return EnableLedMode;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that start/stop the LEDs according to the pulse configuration.
+        /// Creates a message that start/stop the LEDs according to the pulse configuration.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the EnableLedMode register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => EnableLedMode.FromPayload(MessageType, Value));
+            return Harp.LedArray.EnableLedMode.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that start/stop the LEDs according to the pulse configuration.
+    /// </summary>
+    [DisplayName("TimestampedEnableLedModePayload")]
+    [Description("Creates a timestamped message payload that start/stop the LEDs according to the pulse configuration.")]
+    public partial class CreateTimestampedEnableLedModePayload : CreateEnableLedModePayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that start/stop the LEDs according to the pulse configuration.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the EnableLedMode register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.EnableLedMode.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that enables/disables the LEDs.
     /// </summary>
     [DisplayName("EnableLedPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that enables/disables the LEDs.")]
-    public partial class CreateEnableLedPayload : HarpCombinator
+    [Description("Creates a message payload that enables/disables the LEDs.")]
+    public partial class CreateEnableLedPayload
     {
         /// <summary>
         /// Gets or sets the value that enables/disables the LEDs.
         /// </summary>
         [Description("The value that enables/disables the LEDs.")]
-        public LedState Value { get; set; }
+        public LedState EnableLed { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that enables/disables the LEDs.
+        /// Creates a message payload for the EnableLed register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public LedState GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return EnableLed;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that enables/disables the LEDs.
+        /// Creates a message that enables/disables the LEDs.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the EnableLed register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => EnableLed.FromPayload(MessageType, Value));
+            return Harp.LedArray.EnableLed.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that enables/disables the LEDs.
+    /// </summary>
+    [DisplayName("TimestampedEnableLedPayload")]
+    [Description("Creates a timestamped message payload that enables/disables the LEDs.")]
+    public partial class CreateTimestampedEnableLedPayload : CreateEnableLedPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that enables/disables the LEDs.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the EnableLed register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.EnableLed.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.
     /// </summary>
     [DisplayName("DigitalInputStatePayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.")]
-    public partial class CreateDigitalInputStatePayload : HarpCombinator
+    [Description("Creates a message payload that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.")]
+    public partial class CreateDigitalInputStatePayload
     {
         /// <summary>
         /// Gets or sets the value that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.
         /// </summary>
         [Description("The value that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.")]
-        public DigitalInputs Value { get; set; }
+        public DigitalInputs DigitalInputState { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.
+        /// Creates a message payload for the DigitalInputState register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public DigitalInputs GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return DigitalInputState;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.
+        /// Creates a message that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the DigitalInputState register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => DigitalInputState.FromPayload(MessageType, Value));
+            return Harp.LedArray.DigitalInputState.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.
+    /// </summary>
+    [DisplayName("TimestampedDigitalInputStatePayload")]
+    [Description("Creates a timestamped message payload that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.")]
+    public partial class CreateTimestampedDigitalInputStatePayload : CreateDigitalInputStatePayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that state of the digital input pins. An event will be emitted when the value of any digital input pin changes.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the DigitalInputState register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.DigitalInputState.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that configuration of the digital outputs behavior.
     /// </summary>
     [DisplayName("DigitalOutputSyncPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that configuration of the digital outputs behavior.")]
-    public partial class CreateDigitalOutputSyncPayload : HarpCombinator
+    [Description("Creates a message payload that configuration of the digital outputs behavior.")]
+    public partial class CreateDigitalOutputSyncPayload
     {
         /// <summary>
         /// Gets or sets a value that configuration of the DO0 functionality.
@@ -3906,52 +3962,55 @@ namespace Harp.LedArray
         public DO1SyncConfig DO1Sync { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that configuration of the digital outputs behavior.
+        /// Creates a message payload for the DigitalOutputSync register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public DigitalOutputSyncPayload GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            DigitalOutputSyncPayload value;
+            value.DO0Sync = DO0Sync;
+            value.DO1Sync = DO1Sync;
+            return value;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that configuration of the digital outputs behavior.
+        /// Creates a message that configuration of the digital outputs behavior.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the DigitalOutputSync register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ =>
-            {
-                DigitalOutputSyncPayload value;
-                value.DO0Sync = DO0Sync;
-                value.DO1Sync = DO1Sync;
-                return DigitalOutputSync.FromPayload(MessageType, value);
-            });
+            return Harp.LedArray.DigitalOutputSync.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that configuration of the digital outputs behavior.
+    /// </summary>
+    [DisplayName("TimestampedDigitalOutputSyncPayload")]
+    [Description("Creates a timestamped message payload that configuration of the digital outputs behavior.")]
+    public partial class CreateTimestampedDigitalOutputSyncPayload : CreateDigitalOutputSyncPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that configuration of the digital outputs behavior.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the DigitalOutputSync register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.DigitalOutputSync.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that configuration of the digital inputs pins behavior.
     /// </summary>
     [DisplayName("DigitalInputTriggerPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that configuration of the digital inputs pins behavior.")]
-    public partial class CreateDigitalInputTriggerPayload : HarpCombinator
+    [Description("Creates a message payload that configuration of the digital inputs pins behavior.")]
+    public partial class CreateDigitalInputTriggerPayload
     {
         /// <summary>
         /// Gets or sets a value that configuration of the DIO input pin.
@@ -3966,52 +4025,55 @@ namespace Harp.LedArray
         public DigitalInputTriggerConfig DI1Trigger { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that configuration of the digital inputs pins behavior.
+        /// Creates a message payload for the DigitalInputTrigger register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public DigitalInputTriggerPayload GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            DigitalInputTriggerPayload value;
+            value.DI0Trigger = DI0Trigger;
+            value.DI1Trigger = DI1Trigger;
+            return value;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that configuration of the digital inputs pins behavior.
+        /// Creates a message that configuration of the digital inputs pins behavior.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the DigitalInputTrigger register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ =>
-            {
-                DigitalInputTriggerPayload value;
-                value.DI0Trigger = DI0Trigger;
-                value.DI1Trigger = DI1Trigger;
-                return DigitalInputTrigger.FromPayload(MessageType, value);
-            });
+            return Harp.LedArray.DigitalInputTrigger.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that configuration of the digital inputs pins behavior.
+    /// </summary>
+    [DisplayName("TimestampedDigitalInputTriggerPayload")]
+    [Description("Creates a timestamped message payload that configuration of the digital inputs pins behavior.")]
+    public partial class CreateTimestampedDigitalInputTriggerPayload : CreateDigitalInputTriggerPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that configuration of the digital inputs pins behavior.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the DigitalInputTrigger register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.DigitalInputTrigger.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the pulse mode used by the LEDs.
     /// </summary>
     [DisplayName("PulseModePayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the pulse mode used by the LEDs.")]
-    public partial class CreatePulseModePayload : HarpCombinator
+    [Description("Creates a message payload that sets the pulse mode used by the LEDs.")]
+    public partial class CreatePulseModePayload
     {
         /// <summary>
         /// Gets or sets a value that sets the pulse mode used in LED0.
@@ -4026,52 +4088,55 @@ namespace Harp.LedArray
         public PulseModeConfig Led1Mode { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the pulse mode used by the LEDs.
+        /// Creates a message payload for the PulseMode register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public PulseModePayload GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            PulseModePayload value;
+            value.Led0Mode = Led0Mode;
+            value.Led1Mode = Led1Mode;
+            return value;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the pulse mode used by the LEDs.
+        /// Creates a message that sets the pulse mode used by the LEDs.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the PulseMode register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ =>
-            {
-                PulseModePayload value;
-                value.Led0Mode = Led0Mode;
-                value.Led1Mode = Led1Mode;
-                return PulseMode.FromPayload(MessageType, value);
-            });
+            return Harp.LedArray.PulseMode.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the pulse mode used by the LEDs.
+    /// </summary>
+    [DisplayName("TimestampedPulseModePayload")]
+    [Description("Creates a timestamped message payload that sets the pulse mode used by the LEDs.")]
+    public partial class CreateTimestampedPulseModePayload : CreatePulseModePayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the pulse mode used by the LEDs.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the PulseMode register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.PulseMode.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the power to LED0, between 1 and 120 (arbitrary units).
     /// </summary>
     [DisplayName("Led0PowerPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the power to LED0, between 1 and 120 (arbitrary units).")]
-    public partial class CreateLed0PowerPayload : HarpCombinator
+    [Description("Creates a message payload that sets the power to LED0, between 1 and 120 (arbitrary units).")]
+    public partial class CreateLed0PowerPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the power to LED0, between 1 and 120 (arbitrary units).
@@ -4079,49 +4144,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 120)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the power to LED0, between 1 and 120 (arbitrary units).")]
-        public byte Value { get; set; } = 1;
+        public byte Led0Power { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the power to LED0, between 1 and 120 (arbitrary units).
+        /// Creates a message payload for the Led0Power register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public byte GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0Power;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the power to LED0, between 1 and 120 (arbitrary units).
+        /// Creates a message that sets the power to LED0, between 1 and 120 (arbitrary units).
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0Power register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0Power.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0Power.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the power to LED0, between 1 and 120 (arbitrary units).
+    /// </summary>
+    [DisplayName("TimestampedLed0PowerPayload")]
+    [Description("Creates a timestamped message payload that sets the power to LED0, between 1 and 120 (arbitrary units).")]
+    public partial class CreateTimestampedLed0PowerPayload : CreateLed0PowerPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the power to LED0, between 1 and 120 (arbitrary units).
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0Power register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0Power.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the power to LED1, between 1 and 120 (arbitrary units).
     /// </summary>
     [DisplayName("Led1PowerPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the power to LED1, between 1 and 120 (arbitrary units).")]
-    public partial class CreateLed1PowerPayload : HarpCombinator
+    [Description("Creates a message payload that sets the power to LED1, between 1 and 120 (arbitrary units).")]
+    public partial class CreateLed1PowerPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the power to LED1, between 1 and 120 (arbitrary units).
@@ -4129,49 +4200,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 120)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the power to LED1, between 1 and 120 (arbitrary units).")]
-        public byte Value { get; set; } = 1;
+        public byte Led1Power { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the power to LED1, between 1 and 120 (arbitrary units).
+        /// Creates a message payload for the Led1Power register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public byte GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1Power;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the power to LED1, between 1 and 120 (arbitrary units).
+        /// Creates a message that sets the power to LED1, between 1 and 120 (arbitrary units).
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1Power register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1Power.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1Power.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the power to LED1, between 1 and 120 (arbitrary units).
+    /// </summary>
+    [DisplayName("TimestampedLed1PowerPayload")]
+    [Description("Creates a timestamped message payload that sets the power to LED1, between 1 and 120 (arbitrary units).")]
+    public partial class CreateTimestampedLed1PowerPayload : CreateLed1PowerPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the power to LED1, between 1 and 120 (arbitrary units).
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1Power register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1Power.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.
     /// </summary>
     [DisplayName("Led0PwmFrequencyPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.")]
-    public partial class CreateLed0PwmFrequencyPayload : HarpCombinator
+    [Description("Creates a message payload that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.")]
+    public partial class CreateLed0PwmFrequencyPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.
@@ -4179,49 +4256,55 @@ namespace Harp.LedArray
         [Range(min: 0.5, max: 2000)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.")]
-        public float Value { get; set; } = 0.5;
+        public float Led0PwmFrequency { get; set; } = 0.5F;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.
+        /// Creates a message payload for the Led0PwmFrequency register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public float GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PwmFrequency;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.
+        /// Creates a message that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PwmFrequency register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PwmFrequency.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PwmFrequency.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.
+    /// </summary>
+    [DisplayName("TimestampedLed0PwmFrequencyPayload")]
+    [Description("Creates a timestamped message payload that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.")]
+    public partial class CreateTimestampedLed0PwmFrequencyPayload : CreateLed0PwmFrequencyPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the frequency (Hz) of LED0 when in Pwm mode, between 0.5 and 2000.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PwmFrequency register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PwmFrequency.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.
     /// </summary>
     [DisplayName("Led0PwmDutyCyclePayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.")]
-    public partial class CreateLed0PwmDutyCyclePayload : HarpCombinator
+    [Description("Creates a message payload that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.")]
+    public partial class CreateLed0PwmDutyCyclePayload
     {
         /// <summary>
         /// Gets or sets the value that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.
@@ -4229,49 +4312,55 @@ namespace Harp.LedArray
         [Range(min: 0.1, max: 99.9)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.")]
-        public float Value { get; set; } = 0.1;
+        public float Led0PwmDutyCycle { get; set; } = 0.1F;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.
+        /// Creates a message payload for the Led0PwmDutyCycle register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public float GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PwmDutyCycle;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.
+        /// Creates a message that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PwmDutyCycle register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PwmDutyCycle.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PwmDutyCycle.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.
+    /// </summary>
+    [DisplayName("TimestampedLed0PwmDutyCyclePayload")]
+    [Description("Creates a timestamped message payload that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.")]
+    public partial class CreateTimestampedLed0PwmDutyCyclePayload : CreateLed0PwmDutyCyclePayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the duty cycle (%) of LED0 when in Pwm mode, between 0.1 and 99.9.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PwmDutyCycle register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PwmDutyCycle.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led0PwmPulseCounterPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.")]
-    public partial class CreateLed0PwmPulseCounterPayload : HarpCombinator
+    [Description("Creates a message payload that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.")]
+    public partial class CreateLed0PwmPulseCounterPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.
@@ -4279,49 +4368,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led0PwmPulseCounter { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.
+        /// Creates a message payload for the Led0PwmPulseCounter register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PwmPulseCounter;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.
+        /// Creates a message that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PwmPulseCounter register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PwmPulseCounter.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PwmPulseCounter.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed0PwmPulseCounterPayload")]
+    [Description("Creates a timestamped message payload that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed0PwmPulseCounterPayload : CreateLed0PwmPulseCounterPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the number of pulses of LED0 when in Pwm mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PwmPulseCounter register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PwmPulseCounter.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led0PulseTimeOnPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed0PulseTimeOnPayload : HarpCombinator
+    [Description("Creates a message payload that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed0PulseTimeOnPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
@@ -4329,49 +4424,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led0PulseTimeOn { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led0PulseTimeOn register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PulseTimeOn;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PulseTimeOn register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PulseTimeOn.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PulseTimeOn.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed0PulseTimeOnPayload")]
+    [Description("Creates a timestamped message payload that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed0PulseTimeOnPayload : CreateLed0PulseTimeOnPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the time on (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PulseTimeOn register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PulseTimeOn.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led0PulseTimeOffPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed0PulseTimeOffPayload : HarpCombinator
+    [Description("Creates a message payload that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed0PulseTimeOffPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
@@ -4379,49 +4480,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led0PulseTimeOff { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led0PulseTimeOff register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PulseTimeOff;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PulseTimeOff register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PulseTimeOff.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PulseTimeOff.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed0PulseTimeOffPayload")]
+    [Description("Creates a timestamped message payload that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed0PulseTimeOffPayload : CreateLed0PulseTimeOffPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the time off (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PulseTimeOff register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PulseTimeOff.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led0PulseTimePulseCounterPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed0PulseTimePulseCounterPayload : HarpCombinator
+    [Description("Creates a message payload that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed0PulseTimePulseCounterPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.
@@ -4429,49 +4536,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led0PulseTimePulseCounter { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led0PulseTimePulseCounter register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PulseTimePulseCounter;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PulseTimePulseCounter register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PulseTimePulseCounter.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PulseTimePulseCounter.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed0PulseTimePulseCounterPayload")]
+    [Description("Creates a timestamped message payload that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed0PulseTimePulseCounterPayload : CreateLed0PulseTimePulseCounterPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the number of pulses of LED0 when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PulseTimePulseCounter register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PulseTimePulseCounter.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led0PulseTimeTailPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed0PulseTimeTailPayload : HarpCombinator
+    [Description("Creates a message payload that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed0PulseTimeTailPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
@@ -4479,49 +4592,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led0PulseTimeTail { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led0PulseTimeTail register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PulseTimeTail;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PulseTimeTail register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PulseTimeTail.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PulseTimeTail.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed0PulseTimeTailPayload")]
+    [Description("Creates a timestamped message payload that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed0PulseTimeTailPayload : CreateLed0PulseTimeTailPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the wait time between pulses (milliseconds) of LED0 when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PulseTimeTail register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PulseTimeTail.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led0PulseRepeatCounterPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed0PulseRepeatCounterPayload : HarpCombinator
+    [Description("Creates a message payload that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed0PulseRepeatCounterPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.
@@ -4529,49 +4648,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led0PulseRepeatCounter { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led0PulseRepeatCounter register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PulseRepeatCounter;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PulseRepeatCounter register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PulseRepeatCounter.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PulseRepeatCounter.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed0PulseRepeatCounterPayload")]
+    [Description("Creates a timestamped message payload that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed0PulseRepeatCounterPayload : CreateLed0PulseRepeatCounterPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the number of repetitions of LED0 pulse protocol when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PulseRepeatCounter register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PulseRepeatCounter.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.
     /// </summary>
     [DisplayName("Led1PwmFrequencyPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.")]
-    public partial class CreateLed1PwmFrequencyPayload : HarpCombinator
+    [Description("Creates a message payload that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.")]
+    public partial class CreateLed1PwmFrequencyPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.
@@ -4579,49 +4704,55 @@ namespace Harp.LedArray
         [Range(min: 0.5, max: 2000)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.")]
-        public float Value { get; set; } = 0.5;
+        public float Led1PwmFrequency { get; set; } = 0.5F;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.
+        /// Creates a message payload for the Led1PwmFrequency register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public float GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1PwmFrequency;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.
+        /// Creates a message that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1PwmFrequency register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1PwmFrequency.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1PwmFrequency.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.
+    /// </summary>
+    [DisplayName("TimestampedLed1PwmFrequencyPayload")]
+    [Description("Creates a timestamped message payload that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.")]
+    public partial class CreateTimestampedLed1PwmFrequencyPayload : CreateLed1PwmFrequencyPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the frequency (Hz) of LED1 when in Pwm mode, between 0.5 and 2000.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1PwmFrequency register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1PwmFrequency.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.
     /// </summary>
     [DisplayName("Led1PwmDutyCyclePayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.")]
-    public partial class CreateLed1PwmDutyCyclePayload : HarpCombinator
+    [Description("Creates a message payload that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.")]
+    public partial class CreateLed1PwmDutyCyclePayload
     {
         /// <summary>
         /// Gets or sets the value that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.
@@ -4629,49 +4760,55 @@ namespace Harp.LedArray
         [Range(min: 0.1, max: 99.9)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.")]
-        public float Value { get; set; } = 0.1;
+        public float Led1PwmDutyCycle { get; set; } = 0.1F;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.
+        /// Creates a message payload for the Led1PwmDutyCycle register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public float GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1PwmDutyCycle;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.
+        /// Creates a message that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1PwmDutyCycle register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1PwmDutyCycle.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1PwmDutyCycle.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.
+    /// </summary>
+    [DisplayName("TimestampedLed1PwmDutyCyclePayload")]
+    [Description("Creates a timestamped message payload that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.")]
+    public partial class CreateTimestampedLed1PwmDutyCyclePayload : CreateLed1PwmDutyCyclePayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the duty cycle (%) of LED1 when in Pwm mode, between 0.1 and 99.9.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1PwmDutyCycle register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1PwmDutyCycle.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led1PwmPulseCounterPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.")]
-    public partial class CreateLed1PwmPulseCounterPayload : HarpCombinator
+    [Description("Creates a message payload that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.")]
+    public partial class CreateLed1PwmPulseCounterPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.
@@ -4679,49 +4816,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led1PwmPulseCounter { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.
+        /// Creates a message payload for the Led1PwmPulseCounter register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1PwmPulseCounter;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.
+        /// Creates a message that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1PwmPulseCounter register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1PwmPulseCounter.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1PwmPulseCounter.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed1PwmPulseCounterPayload")]
+    [Description("Creates a timestamped message payload that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed1PwmPulseCounterPayload : CreateLed1PwmPulseCounterPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the number of pulses of LED1 when in Pwm mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1PwmPulseCounter register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1PwmPulseCounter.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led1PulseTimeOnPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed1PulseTimeOnPayload : HarpCombinator
+    [Description("Creates a message payload that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed1PulseTimeOnPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
@@ -4729,49 +4872,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led1PulseTimeOn { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led1PulseTimeOn register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1PulseTimeOn;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1PulseTimeOn register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1PulseTimeOn.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1PulseTimeOn.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed1PulseTimeOnPayload")]
+    [Description("Creates a timestamped message payload that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed1PulseTimeOnPayload : CreateLed1PulseTimeOnPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the time on (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1PulseTimeOn register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1PulseTimeOn.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led1PulseTimeOffPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed1PulseTimeOffPayload : HarpCombinator
+    [Description("Creates a message payload that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed1PulseTimeOffPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
@@ -4779,49 +4928,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led1PulseTimeOff { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led1PulseTimeOff register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1PulseTimeOff;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1PulseTimeOff register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1PulseTimeOff.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1PulseTimeOff.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed1PulseTimeOffPayload")]
+    [Description("Creates a timestamped message payload that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed1PulseTimeOffPayload : CreateLed1PulseTimeOffPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the time off (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1PulseTimeOff register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1PulseTimeOff.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led1PulseTimePulseCounterPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed1PulseTimePulseCounterPayload : HarpCombinator
+    [Description("Creates a message payload that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed1PulseTimePulseCounterPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.
@@ -4829,49 +4984,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led1PulseTimePulseCounter { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led1PulseTimePulseCounter register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1PulseTimePulseCounter;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1PulseTimePulseCounter register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1PulseTimePulseCounter.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1PulseTimePulseCounter.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed1PulseTimePulseCounterPayload")]
+    [Description("Creates a timestamped message payload that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed1PulseTimePulseCounterPayload : CreateLed1PulseTimePulseCounterPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the number of pulses of LED1 when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1PulseTimePulseCounter register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1PulseTimePulseCounter.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led1PulseTimeTailPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed1PulseTimeTailPayload : HarpCombinator
+    [Description("Creates a message payload that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed1PulseTimeTailPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
@@ -4879,49 +5040,55 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led1PulseTimeTail { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led1PulseTimeTail register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1PulseTimeTail;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1PulseTimeTail register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1PulseTimeTail.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1PulseTimeTail.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed1PulseTimeTailPayload")]
+    [Description("Creates a timestamped message payload that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed1PulseTimeTailPayload : CreateLed1PulseTimeTailPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the wait time between pulses (milliseconds) of LED1 when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1PulseTimeTail register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1PulseTimeTail.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.
     /// </summary>
     [DisplayName("Led1PulseRepeatCounterPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.")]
-    public partial class CreateLed1PulseRepeatCounterPayload : HarpCombinator
+    [Description("Creates a message payload that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateLed1PulseRepeatCounterPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.
@@ -4929,289 +5096,325 @@ namespace Harp.LedArray
         [Range(min: 1, max: 65535)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.")]
-        public ushort Value { get; set; } = 1;
+        public ushort Led1PulseRepeatCounter { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.
+        /// Creates a message payload for the Led1PulseRepeatCounter register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public ushort GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1PulseRepeatCounter;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.
+        /// Creates a message that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1PulseRepeatCounter register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1PulseRepeatCounter.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1PulseRepeatCounter.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.
+    /// </summary>
+    [DisplayName("TimestampedLed1PulseRepeatCounterPayload")]
+    [Description("Creates a timestamped message payload that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.")]
+    public partial class CreateTimestampedLed1PulseRepeatCounterPayload : CreateLed1PulseRepeatCounterPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the number of repetitions of LED1 pulse protocol when in PulseTime mode, between 1 and 65535.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1PulseRepeatCounter register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1PulseRepeatCounter.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that get the real frequency (Hz) of LED0 when in Pwm mode.
     /// </summary>
     [DisplayName("Led0PwmRealPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that get the real frequency (Hz) of LED0 when in Pwm mode.")]
-    public partial class CreateLed0PwmRealPayload : HarpCombinator
+    [Description("Creates a message payload that get the real frequency (Hz) of LED0 when in Pwm mode.")]
+    public partial class CreateLed0PwmRealPayload
     {
         /// <summary>
         /// Gets or sets the value that get the real frequency (Hz) of LED0 when in Pwm mode.
         /// </summary>
         [Description("The value that get the real frequency (Hz) of LED0 when in Pwm mode.")]
-        public float Value { get; set; }
+        public float Led0PwmReal { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that get the real frequency (Hz) of LED0 when in Pwm mode.
+        /// Creates a message payload for the Led0PwmReal register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public float GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PwmReal;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that get the real frequency (Hz) of LED0 when in Pwm mode.
+        /// Creates a message that get the real frequency (Hz) of LED0 when in Pwm mode.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PwmReal register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PwmReal.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PwmReal.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that get the real frequency (Hz) of LED0 when in Pwm mode.
+    /// </summary>
+    [DisplayName("TimestampedLed0PwmRealPayload")]
+    [Description("Creates a timestamped message payload that get the real frequency (Hz) of LED0 when in Pwm mode.")]
+    public partial class CreateTimestampedLed0PwmRealPayload : CreateLed0PwmRealPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that get the real frequency (Hz) of LED0 when in Pwm mode.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PwmReal register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PwmReal.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that get the real duty cycle (%) of LED0 when in Pwm mode.
     /// </summary>
     [DisplayName("Led0PwmDutyCycleRealPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that get the real duty cycle (%) of LED0 when in Pwm mode.")]
-    public partial class CreateLed0PwmDutyCycleRealPayload : HarpCombinator
+    [Description("Creates a message payload that get the real duty cycle (%) of LED0 when in Pwm mode.")]
+    public partial class CreateLed0PwmDutyCycleRealPayload
     {
         /// <summary>
         /// Gets or sets the value that get the real duty cycle (%) of LED0 when in Pwm mode.
         /// </summary>
         [Description("The value that get the real duty cycle (%) of LED0 when in Pwm mode.")]
-        public float Value { get; set; }
+        public float Led0PwmDutyCycleReal { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that get the real duty cycle (%) of LED0 when in Pwm mode.
+        /// Creates a message payload for the Led0PwmDutyCycleReal register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public float GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led0PwmDutyCycleReal;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that get the real duty cycle (%) of LED0 when in Pwm mode.
+        /// Creates a message that get the real duty cycle (%) of LED0 when in Pwm mode.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led0PwmDutyCycleReal register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led0PwmDutyCycleReal.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led0PwmDutyCycleReal.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that get the real duty cycle (%) of LED0 when in Pwm mode.
+    /// </summary>
+    [DisplayName("TimestampedLed0PwmDutyCycleRealPayload")]
+    [Description("Creates a timestamped message payload that get the real duty cycle (%) of LED0 when in Pwm mode.")]
+    public partial class CreateTimestampedLed0PwmDutyCycleRealPayload : CreateLed0PwmDutyCycleRealPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that get the real duty cycle (%) of LED0 when in Pwm mode.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led0PwmDutyCycleReal register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led0PwmDutyCycleReal.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that get the real frequency (Hz) of LED1 when in Pwm mode.
     /// </summary>
     [DisplayName("Led1PwmRealPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that get the real frequency (Hz) of LED1 when in Pwm mode.")]
-    public partial class CreateLed1PwmRealPayload : HarpCombinator
+    [Description("Creates a message payload that get the real frequency (Hz) of LED1 when in Pwm mode.")]
+    public partial class CreateLed1PwmRealPayload
     {
         /// <summary>
         /// Gets or sets the value that get the real frequency (Hz) of LED1 when in Pwm mode.
         /// </summary>
         [Description("The value that get the real frequency (Hz) of LED1 when in Pwm mode.")]
-        public float Value { get; set; }
+        public float Led1PwmReal { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that get the real frequency (Hz) of LED1 when in Pwm mode.
+        /// Creates a message payload for the Led1PwmReal register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public float GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return Led1PwmReal;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that get the real frequency (Hz) of LED1 when in Pwm mode.
+        /// Creates a message that get the real frequency (Hz) of LED1 when in Pwm mode.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the Led1PwmReal register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => Led1PwmReal.FromPayload(MessageType, Value));
+            return Harp.LedArray.Led1PwmReal.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that get the real frequency (Hz) of LED1 when in Pwm mode.
+    /// </summary>
+    [DisplayName("TimestampedLed1PwmRealPayload")]
+    [Description("Creates a timestamped message payload that get the real frequency (Hz) of LED1 when in Pwm mode.")]
+    public partial class CreateTimestampedLed1PwmRealPayload : CreateLed1PwmRealPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that get the real frequency (Hz) of LED1 when in Pwm mode.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the Led1PwmReal register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.Led1PwmReal.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that get the real duty cycle (%) of LED1 when in Pwm mode.
     /// </summary>
     [DisplayName("LedD1PwmDutyCycleRealPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that get the real duty cycle (%) of LED1 when in Pwm mode.")]
-    public partial class CreateLedD1PwmDutyCycleRealPayload : HarpCombinator
+    [Description("Creates a message payload that get the real duty cycle (%) of LED1 when in Pwm mode.")]
+    public partial class CreateLedD1PwmDutyCycleRealPayload
     {
         /// <summary>
         /// Gets or sets the value that get the real duty cycle (%) of LED1 when in Pwm mode.
         /// </summary>
         [Description("The value that get the real duty cycle (%) of LED1 when in Pwm mode.")]
-        public float Value { get; set; }
+        public float LedD1PwmDutyCycleReal { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that get the real duty cycle (%) of LED1 when in Pwm mode.
+        /// Creates a message payload for the LedD1PwmDutyCycleReal register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public float GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return LedD1PwmDutyCycleReal;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that get the real duty cycle (%) of LED1 when in Pwm mode.
+        /// Creates a message that get the real duty cycle (%) of LED1 when in Pwm mode.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the LedD1PwmDutyCycleReal register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => LedD1PwmDutyCycleReal.FromPayload(MessageType, Value));
+            return Harp.LedArray.LedD1PwmDutyCycleReal.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that get the real duty cycle (%) of LED1 when in Pwm mode.
+    /// </summary>
+    [DisplayName("TimestampedLedD1PwmDutyCycleRealPayload")]
+    [Description("Creates a timestamped message payload that get the real duty cycle (%) of LED1 when in Pwm mode.")]
+    public partial class CreateTimestampedLedD1PwmDutyCycleRealPayload : CreateLedD1PwmDutyCycleRealPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that get the real duty cycle (%) of LED1 when in Pwm mode.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the LedD1PwmDutyCycleReal register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.LedD1PwmDutyCycleReal.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that write the state of the auxiliary digital output bit.
     /// </summary>
     [DisplayName("AuxDigitalOutputStatePayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that write the state of the auxiliary digital output bit.")]
-    public partial class CreateAuxDigitalOutputStatePayload : HarpCombinator
+    [Description("Creates a message payload that write the state of the auxiliary digital output bit.")]
+    public partial class CreateAuxDigitalOutputStatePayload
     {
         /// <summary>
         /// Gets or sets the value that write the state of the auxiliary digital output bit.
         /// </summary>
         [Description("The value that write the state of the auxiliary digital output bit.")]
-        public AuxDigitalOutputs Value { get; set; }
+        public AuxDigitalOutputs AuxDigitalOutputState { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that write the state of the auxiliary digital output bit.
+        /// Creates a message payload for the AuxDigitalOutputState register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public AuxDigitalOutputs GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return AuxDigitalOutputState;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that write the state of the auxiliary digital output bit.
+        /// Creates a message that write the state of the auxiliary digital output bit.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the AuxDigitalOutputState register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => AuxDigitalOutputState.FromPayload(MessageType, Value));
+            return Harp.LedArray.AuxDigitalOutputState.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that write the state of the auxiliary digital output bit.
+    /// </summary>
+    [DisplayName("TimestampedAuxDigitalOutputStatePayload")]
+    [Description("Creates a timestamped message payload that write the state of the auxiliary digital output bit.")]
+    public partial class CreateTimestampedAuxDigitalOutputStatePayload : CreateAuxDigitalOutputStatePayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that write the state of the auxiliary digital output bit.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the AuxDigitalOutputState register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.AuxDigitalOutputState.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that sets the power to be applied to auxiliary LED, between 1 and 120.
     /// </summary>
     [DisplayName("AuxLedPowerPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that sets the power to be applied to auxiliary LED, between 1 and 120.")]
-    public partial class CreateAuxLedPowerPayload : HarpCombinator
+    [Description("Creates a message payload that sets the power to be applied to auxiliary LED, between 1 and 120.")]
+    public partial class CreateAuxLedPowerPayload
     {
         /// <summary>
         /// Gets or sets the value that sets the power to be applied to auxiliary LED, between 1 and 120.
@@ -5219,134 +5422,153 @@ namespace Harp.LedArray
         [Range(min: 1, max: 120)]
         [Editor(DesignTypes.NumericUpDownEditor, DesignTypes.UITypeEditor)]
         [Description("The value that sets the power to be applied to auxiliary LED, between 1 and 120.")]
-        public byte Value { get; set; } = 1;
+        public byte AuxLedPower { get; set; } = 1;
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that sets the power to be applied to auxiliary LED, between 1 and 120.
+        /// Creates a message payload for the AuxLedPower register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public byte GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return AuxLedPower;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that sets the power to be applied to auxiliary LED, between 1 and 120.
+        /// Creates a message that sets the power to be applied to auxiliary LED, between 1 and 120.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the AuxLedPower register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => AuxLedPower.FromPayload(MessageType, Value));
+            return Harp.LedArray.AuxLedPower.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that sets the power to be applied to auxiliary LED, between 1 and 120.
+    /// </summary>
+    [DisplayName("TimestampedAuxLedPowerPayload")]
+    [Description("Creates a timestamped message payload that sets the power to be applied to auxiliary LED, between 1 and 120.")]
+    public partial class CreateTimestampedAuxLedPowerPayload : CreateAuxLedPowerPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that sets the power to be applied to auxiliary LED, between 1 and 120.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the AuxLedPower register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.AuxLedPower.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that write the state of digital output lines.
     /// </summary>
     [DisplayName("DigitalOutputStatePayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that write the state of digital output lines.")]
-    public partial class CreateDigitalOutputStatePayload : HarpCombinator
+    [Description("Creates a message payload that write the state of digital output lines.")]
+    public partial class CreateDigitalOutputStatePayload
     {
         /// <summary>
         /// Gets or sets the value that write the state of digital output lines.
         /// </summary>
         [Description("The value that write the state of digital output lines.")]
-        public DigitalOutputs Value { get; set; }
+        public DigitalOutputs DigitalOutputState { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that write the state of digital output lines.
+        /// Creates a message payload for the DigitalOutputState register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public DigitalOutputs GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return DigitalOutputState;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that write the state of digital output lines.
+        /// Creates a message that write the state of digital output lines.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the DigitalOutputState register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => DigitalOutputState.FromPayload(MessageType, Value));
+            return Harp.LedArray.DigitalOutputState.FromPayload(messageType, GetPayload());
         }
     }
 
     /// <summary>
-    /// Represents an operator that creates a sequence of message payloads
+    /// Represents an operator that creates a timestamped message payload
+    /// that write the state of digital output lines.
+    /// </summary>
+    [DisplayName("TimestampedDigitalOutputStatePayload")]
+    [Description("Creates a timestamped message payload that write the state of digital output lines.")]
+    public partial class CreateTimestampedDigitalOutputStatePayload : CreateDigitalOutputStatePayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that write the state of digital output lines.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the DigitalOutputState register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.DigitalOutputState.FromPayload(timestamp, messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a message payload
     /// that specifies all the active events in the device.
     /// </summary>
     [DisplayName("EnableEventsPayload")]
-    [WorkflowElementCategory(ElementCategory.Transform)]
-    [Description("Creates a sequence of message payloads that specifies all the active events in the device.")]
-    public partial class CreateEnableEventsPayload : HarpCombinator
+    [Description("Creates a message payload that specifies all the active events in the device.")]
+    public partial class CreateEnableEventsPayload
     {
         /// <summary>
         /// Gets or sets the value that specifies all the active events in the device.
         /// </summary>
         [Description("The value that specifies all the active events in the device.")]
-        public LedArrayEvents Value { get; set; }
+        public LedArrayEvents EnableEvents { get; set; }
 
         /// <summary>
-        /// Creates an observable sequence that contains a single message
-        /// that specifies all the active events in the device.
+        /// Creates a message payload for the EnableEvents register.
         /// </summary>
-        /// <returns>
-        /// A sequence containing a single <see cref="HarpMessage"/> object
-        /// representing the created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process()
+        /// <returns>The created message payload value.</returns>
+        public LedArrayEvents GetPayload()
         {
-            return Process(Observable.Return(System.Reactive.Unit.Default));
+            return EnableEvents;
         }
 
         /// <summary>
-        /// Creates an observable sequence of message payloads
-        /// that specifies all the active events in the device.
+        /// Creates a message that specifies all the active events in the device.
         /// </summary>
-        /// <typeparam name="TSource">
-        /// The type of the elements in the <paramref name="source"/> sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The sequence containing the notifications used for emitting message payloads.
-        /// </param>
-        /// <returns>
-        /// A sequence of <see cref="HarpMessage"/> objects representing each
-        /// created message payload.
-        /// </returns>
-        public IObservable<HarpMessage> Process<TSource>(IObservable<TSource> source)
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new message for the EnableEvents register.</returns>
+        public HarpMessage GetMessage(MessageType messageType)
         {
-            return source.Select(_ => EnableEvents.FromPayload(MessageType, Value));
+            return Harp.LedArray.EnableEvents.FromPayload(messageType, GetPayload());
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that creates a timestamped message payload
+    /// that specifies all the active events in the device.
+    /// </summary>
+    [DisplayName("TimestampedEnableEventsPayload")]
+    [Description("Creates a timestamped message payload that specifies all the active events in the device.")]
+    public partial class CreateTimestampedEnableEventsPayload : CreateEnableEventsPayload
+    {
+        /// <summary>
+        /// Creates a timestamped message that specifies all the active events in the device.
+        /// </summary>
+        /// <param name="timestamp">The timestamp of the message payload, in seconds.</param>
+        /// <param name="messageType">Specifies the type of the created message.</param>
+        /// <returns>A new timestamped message for the EnableEvents register.</returns>
+        public HarpMessage GetMessage(double timestamp, MessageType messageType)
+        {
+            return Harp.LedArray.EnableEvents.FromPayload(timestamp, messageType, GetPayload());
         }
     }
 
@@ -5443,6 +5665,7 @@ namespace Harp.LedArray
     [Flags]
     public enum LedState : byte
     {
+        None = 0x0,
         Led0On = 0x1,
         Led1On = 0x2,
         Led0Off = 0x4,
@@ -5455,6 +5678,7 @@ namespace Harp.LedArray
     [Flags]
     public enum DigitalInputs : byte
     {
+        None = 0x0,
         DI0 = 0x1,
         DI1 = 0x2
     }
@@ -5465,6 +5689,7 @@ namespace Harp.LedArray
     [Flags]
     public enum AuxDigitalOutputs : byte
     {
+        None = 0x0,
         Aux0Set = 0x1,
         Aux1Set = 0x2,
         Aux0Clear = 0x4,
@@ -5477,6 +5702,7 @@ namespace Harp.LedArray
     [Flags]
     public enum DigitalOutputs : byte
     {
+        None = 0x0,
         DO0Set = 0x1,
         DO1Set = 0x2,
         DO0Clear = 0x4,
@@ -5489,6 +5715,7 @@ namespace Harp.LedArray
     [Flags]
     public enum LedArrayEvents : byte
     {
+        None = 0x0,
         EnableLed = 0x1,
         DigitalInputState = 0x2
     }
