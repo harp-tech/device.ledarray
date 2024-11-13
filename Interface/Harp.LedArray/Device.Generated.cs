@@ -69,8 +69,44 @@ namespace Harp.LedArray
             { 61, typeof(AuxDigitalOutputState) },
             { 62, typeof(AuxLedPower) },
             { 63, typeof(DigitalOutputState) },
+            { 64, typeof(Reserved0) },
             { 65, typeof(EnableEvents) }
         };
+
+        /// <summary>
+        /// Gets the contents of the metadata file describing the <see cref="LedArray"/>
+        /// device registers.
+        /// </summary>
+        public static readonly string Metadata = GetDeviceMetadata();
+
+        static string GetDeviceMetadata()
+        {
+            var deviceType = typeof(Device);
+            using var metadataStream = deviceType.Assembly.GetManifestResourceStream($"{deviceType.Namespace}.device.yml");
+            using var streamReader = new System.IO.StreamReader(metadataStream);
+            return streamReader.ReadToEnd();
+        }
+    }
+
+    /// <summary>
+    /// Represents an operator that returns the contents of the metadata file
+    /// describing the <see cref="LedArray"/> device registers.
+    /// </summary>
+    [Description("Returns the contents of the metadata file describing the LedArray device registers.")]
+    public partial class GetMetadata : Source<string>
+    {
+        /// <summary>
+        /// Returns an observable sequence with the contents of the metadata file
+        /// describing the <see cref="LedArray"/> device registers.
+        /// </summary>
+        /// <returns>
+        /// A sequence with a single <see cref="string"/> object representing the
+        /// contents of the metadata file.
+        /// </returns>
+        public override IObservable<string> Generate()
+        {
+            return Observable.Return(Device.Metadata);
+        }
     }
 
     /// <summary>
@@ -3512,6 +3548,28 @@ namespace Harp.LedArray
     }
 
     /// <summary>
+    /// Represents a register that reserved for future use.
+    /// </summary>
+    [Description("Reserved for future use")]
+    internal partial class Reserved0
+    {
+        /// <summary>
+        /// Represents the address of the <see cref="Reserved0"/> register. This field is constant.
+        /// </summary>
+        public const int Address = 64;
+
+        /// <summary>
+        /// Represents the payload type of the <see cref="Reserved0"/> register. This field is constant.
+        /// </summary>
+        public const PayloadType RegisterType = PayloadType.U8;
+
+        /// <summary>
+        /// Represents the length of the <see cref="Reserved0"/> register. This field is constant.
+        /// </summary>
+        public const int RegisterLength = 1;
+    }
+
+    /// <summary>
     /// Represents a register that specifies all the active events in the device.
     /// </summary>
     [Description("Specifies all the active events in the device.")]
@@ -5599,6 +5657,22 @@ namespace Harp.LedArray
         /// Configuration of the DO1 functionality.
         /// </summary>
         public DO1SyncConfig DO1Sync;
+
+        /// <summary>
+        /// Returns a <see cref="string"/> that represents the payload of
+        /// the DigitalOutputSync register.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="string"/> that represents the payload of the
+        /// DigitalOutputSync register.
+        /// </returns>
+        public override string ToString()
+        {
+            return "DigitalOutputSyncPayload { " +
+                "DO0Sync = " + DO0Sync + ", " +
+                "DO1Sync = " + DO1Sync + " " +
+            "}";
+        }
     }
 
     /// <summary>
@@ -5628,6 +5702,22 @@ namespace Harp.LedArray
         /// Configuration of the DI1 input pin.
         /// </summary>
         public DigitalInputTriggerConfig DI1Trigger;
+
+        /// <summary>
+        /// Returns a <see cref="string"/> that represents the payload of
+        /// the DigitalInputTrigger register.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="string"/> that represents the payload of the
+        /// DigitalInputTrigger register.
+        /// </returns>
+        public override string ToString()
+        {
+            return "DigitalInputTriggerPayload { " +
+                "DI0Trigger = " + DI0Trigger + ", " +
+                "DI1Trigger = " + DI1Trigger + " " +
+            "}";
+        }
     }
 
     /// <summary>
@@ -5657,6 +5747,22 @@ namespace Harp.LedArray
         /// Sets the pulse mode used in LED0
         /// </summary>
         public PulseModeConfig Led1Mode;
+
+        /// <summary>
+        /// Returns a <see cref="string"/> that represents the payload of
+        /// the PulseMode register.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="string"/> that represents the payload of the
+        /// PulseMode register.
+        /// </returns>
+        public override string ToString()
+        {
+            return "PulseModePayload { " +
+                "Led0Mode = " + Led0Mode + ", " +
+                "Led1Mode = " + Led1Mode + " " +
+            "}";
+        }
     }
 
     /// <summary>
