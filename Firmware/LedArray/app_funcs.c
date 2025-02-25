@@ -731,8 +731,8 @@ bool app_write_REG_LED1_SUPPLY_PWR_CONF(void *a)
 	if (reg < 1 || reg > 120)
 		return false;	
    
-   //if (bus_expansion_exists == false)  // Check only if bus expansion exists in the bus
-	//   if (!write_SMBus_word(33, 0x22, ((int16_t) reg) * 5 -300))
+	if (bus_expansion_exists == false)  // Check only if bus expansion exists in the bus
+		write_SMBus_word(33, 0x22, ((int16_t) reg) * 5 -300);
 		//   core_func_catastrophic_error_detected();
 
 	app_regs.REG_LED1_SUPPLY_PWR_CONF = reg;
